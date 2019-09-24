@@ -8,6 +8,8 @@ import {AngularFireAuthModule} from '@angular/fire/auth';
 import {AngularFireStorageModule} from '@angular/fire/storage';
 import { DetailedComponent } from './detailed/detailed.component';
 import {AppRoutingModule} from './app-routing.module';
+import { RegistrationsListComponent } from './registrations/registrations-list/registrations-list.component';
+import { RegistrationDetailComponent } from './registrations/registration-detail/registration-detail.component';
 // import {AppRoutingModule} from './app-routing/app-routing.module';
 // import {HttpClientModule} from '@angular/common/http';
 // import {FormsModule} from '@angular/forms';
@@ -25,7 +27,9 @@ const firebaseConfig = {
 @NgModule({
   declarations: [
     AppComponent,
-    DetailedComponent
+    DetailedComponent,
+    RegistrationsListComponent,
+    RegistrationDetailComponent
   ],
   imports: [
     BrowserModule,
