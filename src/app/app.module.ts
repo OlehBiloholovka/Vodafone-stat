@@ -10,6 +10,7 @@ import { DetailedComponent } from './detailed/detailed.component';
 import {AppRoutingModule} from './app-routing.module';
 import { RegistrationsListComponent } from './registrations/registrations-list/registrations-list.component';
 import { RegistrationDetailComponent } from './registrations/registration-detail/registration-detail.component';
+import {AngularFireDatabaseModule} from '@angular/fire/database';
 // import {AppRoutingModule} from './app-routing/app-routing.module';
 // import {HttpClientModule} from '@angular/common/http';
 // import {FormsModule} from '@angular/forms';
@@ -34,6 +35,7 @@ const firebaseConfig = {
   imports: [
     BrowserModule,
     AngularFireModule.initializeApp(firebaseConfig),
+    AngularFireDatabaseModule,
     AngularFirestoreModule, // firestore
     AngularFireAuthModule, // auth
     AngularFireStorageModule, // storage

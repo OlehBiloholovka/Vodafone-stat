@@ -1,7 +1,7 @@
 export class Registration {
   $key: number;
   activationDate: string;
-  address: string;
+  addressRDMS: string;
   category: string;
   nameSeller: string;
   codeRDMS: number;
