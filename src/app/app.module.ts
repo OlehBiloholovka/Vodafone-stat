@@ -6,6 +6,11 @@ import {AngularFireModule} from '@angular/fire';
 import {AngularFirestoreModule} from '@angular/fire/firestore';
 import {AngularFireAuthModule} from '@angular/fire/auth';
 import {AngularFireStorageModule} from '@angular/fire/storage';
+import { DetailedComponent } from './detailed/detailed.component';
+import {AppRoutingModule} from './app-routing.module';
+// import {AppRoutingModule} from './app-routing/app-routing.module';
+// import {HttpClientModule} from '@angular/common/http';
+// import {FormsModule} from '@angular/forms';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyC5ulhATzKVGGf7rTx6OuFimM5J8bwTI1I',
@@ -19,14 +24,19 @@ const firebaseConfig = {
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    DetailedComponent
   ],
   imports: [
     BrowserModule,
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFirestoreModule, // firestore
     AngularFireAuthModule, // auth
-    AngularFireStorageModule // storage
+    AngularFireStorageModule, // storage
+    AppRoutingModule,
+    // AppRoutingModule, // routing
+    // HttpClientModule, // http client
+    // FormsModule, // forms module
   ],
   providers: [],
   bootstrap: [AppComponent]
