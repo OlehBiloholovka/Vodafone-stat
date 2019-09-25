@@ -1,0 +1,25 @@
+<h1>PLAN</h1>
+
+<table>
+  <thead>
+  <tr>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let reg of registrationsPlan | async" [style.background]="getBackgroundColor(reg)">
+    <td>{{reg.codeMSISDN}}</td>
+    <td>{{reg.nameSeller}}</td>
+    <td>{{reg.codeRDMS}}</td>
+    <td>{{reg.nameRDMS}}</td>
+    <td>{{reg.addressRDMS}}</td>
+    <td>{{reg.typeRDMS}}</td>
+    <td>{{reg.namePPD}}</td>
+    <td>{{reg.allCount}}</td>
+    <td>{{reg.onCheckingCount}}</td>
+    <td>{{reg.checkedDudCount}}</td>
+    <td>{{reg.plan}}</td>
+    <td>{{reg.prize}}</td>
+  </tr>
+</table>
+
