@@ -1,0 +1,30 @@
+<h1>Registrations</h1>
+
+<table>
+  <thead>
+  <tr>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let reg of registrations | async">
+    <td>{{reg.$key}}</td>
+    <td>{{reg.codeRDMS}}</td>
+    <td>{{reg.nameRDMS}}</td>
+    <td>{{reg.addressRDMS}}</td>
+    <td>{{reg.typeRDMS}}</td>
+    <td>{{reg.namePPD}}</td>
+    <td>{{reg.nameSeller}}</td>
+    <td>{{reg.category}}</td>
+    <td>{{reg.codeMSISDN}}</td>
+    <td>{{reg.headMSISDN}}</td>
+    <td>{{reg.registeredMSISDN}}</td>
+    <td>{{reg.registrationDate | date: "dd/MM/yyyy hh:mm"}}</td>
+    <td>{{reg.activationDate | date: "dd/MM/yyyy hh:mm"}}</td>
+    <td>{{reg.tariffId}}</td>
+    <td>{{reg.refill}}</td>
+    <td>{{reg.rechargeDate}}</td>
+    <td>{{reg.rejectReason}}</td>
+    <td>{{reg.checkDud}}</td>
+  </tr>
+</table>
