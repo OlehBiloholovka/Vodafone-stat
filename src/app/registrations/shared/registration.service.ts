@@ -4,6 +4,7 @@ import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {Registration} from './registration';
 import {RegistrationRdms} from './registration-rdms';
+import {RegistrationMsisdn} from './registration-msisdn';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,7 @@ export class RegistrationService {
   private basePath = '1Qqm9ql9vdEIGM-FTVjN5lGzuefb0aPedKQTv3rZQrOM/detailed22082019';
   registrations: Observable<Registration[]> = null;
   registrationsRDMS: Observable<RegistrationRdms[]>;
+  registrationsMSISDN: Observable<RegistrationMsisdn[]>;
 
   constructor(private db: AngularFireDatabase) {
   }
@@ -51,6 +53,38 @@ export class RegistrationService {
       )
     );
     return this.registrationsRDMS;
+  }
+  getRegistrationsMSISDN(): Observable<RegistrationMsisdn[]> {
+    this.registrationsMSISDN = this.getRegistrationsList().pipe(
+      map(
+        data => {
+          const registrationMSISDNMap = new Map<number, RegistrationMsisdn>();
+          data.map(reg => {
+            let rMsisdn = new RegistrationMsisdn();
+            if (!registrationMSISDNMap.has(reg.codeMSISDN)) {
+              rMsisdn.namePPD = reg.namePPD;
+              rMsisdn.codeRDMS = reg.codeRDMS;
+              rMsisdn.nameRDMS = reg.nameRDMS;
+              rMsisdn.addressRDMS = reg.addressRDMS;
+              rMsisdn.typeRDMS = reg.typeRDMS;
+              rMsisdn.codeMSISDN = reg.codeMSISDN;
+              rMsisdn.nameSeller = reg.nameSeller;
+              registrationMSISDNMap.set(reg.codeMSISDN, rMsisdn);
+            }
+            rMsisdn = registrationMSISDNMap.get(reg.codeMSISDN);
+            rMsisdn.allCount++;
+            if (reg.checkDud === 'Ок') {
+              rMsisdn.checkedDudCount++;
+            }
+            if (reg.checkDud === 'Не отправлено' && (reg.rejectReason === 'Успешно' || reg.rejectReason === 'В работе')) {
+              rMsisdn.onCheckingCount++;
+            }
+          });
+          return Array.from(registrationMSISDNMap.values());
+        }
+      )
+    );
+    return this.registrationsMSISDN;
   }
 }
 

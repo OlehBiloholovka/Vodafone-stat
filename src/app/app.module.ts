@@ -12,6 +12,7 @@ import { RegistrationsListComponent } from './registrations/registrations-list/r
 import { RegistrationDetailComponent } from './registrations/registration-detail/registration-detail.component';
 import {AngularFireDatabaseModule} from '@angular/fire/database';
 import { RegistrationRdmsComponent } from './registrations/registration-rdms/registration-rdms.component';
+import { RegistrationMsisdnComponent } from './registrations/registration-msisdn/registration-msisdn.component';
 // import {AppRoutingModule} from './app-routing/app-routing.module';
 // import {HttpClientModule} from '@angular/common/http';
 // import {FormsModule} from '@angular/forms';
@@ -32,7 +33,8 @@ const firebaseConfig = {
     DetailedComponent,
     RegistrationsListComponent,
     RegistrationDetailComponent,
-    RegistrationRdmsComponent
+    RegistrationRdmsComponent,
+    RegistrationMsisdnComponent
   ],
   imports: [
     BrowserModule,

@@ -3,6 +3,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {DetailedComponent} from './detailed/detailed.component';
 import {RegistrationsListComponent} from './registrations/registrations-list/registrations-list.component';
 import {RegistrationRdmsComponent} from './registrations/registration-rdms/registration-rdms.component';
+import {RegistrationMsisdnComponent} from './registrations/registration-msisdn/registration-msisdn.component';
 
 const routes: Routes = [
   {
@@ -16,6 +17,10 @@ const routes: Routes = [
   {
     path: 'rdms',
     component: RegistrationRdmsComponent,
+  },
+  {
+    path: 'msisdn',
+    component: RegistrationMsisdnComponent,
   },
 ];
 
