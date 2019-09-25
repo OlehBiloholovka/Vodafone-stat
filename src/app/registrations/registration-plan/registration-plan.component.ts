@@ -18,4 +18,11 @@ export class RegistrationPlanComponent implements OnInit {
     this.registrationsPlan = this.rs.getRegistrationsPlan();
   }
 
+  getBackgroundColor(rp: RegistrationPlan): string {
+    if (rp.isCompleted) { return 'green'; }
+    if (rp.mayBeCompleted) { return 'orange'; }
+    if (rp.allCount === 0) { return 'red'; }
+    return '';
+  }
+
 }

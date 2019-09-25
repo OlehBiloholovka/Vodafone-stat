@@ -32,16 +32,25 @@ export class RegistrationService {
     this.registrationsPlan =  this.db.list<RegistrationPlan>(this.planPath).valueChanges().pipe(
       map( data => {
         data.forEach(rPlan => {
+          rPlan.allCount = 0;
+          rPlan.onCheckingCount = 0;
+          rPlan.checkedDudCount = 0;
+          rPlan.isCompleted = false;
+          rPlan.mayBeCompleted = false;
           pMap.set(rPlan.codeMSISDN, rPlan);
         });
         this.getRegistrationsMSISDN().subscribe(d => {
           d.forEach(value => {
             if (pMap.has(value.codeMSISDN)) {
-              const registrationPlan = pMap.get(value.codeMSISDN);
-              registrationPlan.nameSeller = value.nameSeller;
-              registrationPlan.allCount = value.allCount;
-              registrationPlan.onCheckingCount = value.onCheckingCount;
-              registrationPlan.checkedDudCount = value.checkedDudCount;
+              const rPlan = pMap.get(value.codeMSISDN);
+              rPlan.nameSeller = value.nameSeller;
+              rPlan.typeRDMS = value.typeRDMS;
+              rPlan.allCount = value.allCount;
+              rPlan.onCheckingCount = value.onCheckingCount;
+              rPlan.checkedDudCount = value.checkedDudCount;
+              rPlan.isCompleted = rPlan.checkedDudCount >= rPlan.plan;
+              rPlan.mayBeCompleted = (rPlan.checkedDudCount
+                + rPlan.onCheckingCount) >= rPlan.plan;
             }
           });
         });
