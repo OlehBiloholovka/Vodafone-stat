@@ -5,6 +5,7 @@ import {map} from 'rxjs/operators';
 import {Registration} from './registration';
 import {RegistrationRdms} from './registration-rdms';
 import {RegistrationMsisdn} from './registration-msisdn';
+import {RegistrationPlan} from './registration-plan';
 
 @Injectable({
   providedIn: 'root'
@@ -12,9 +13,11 @@ import {RegistrationMsisdn} from './registration-msisdn';
 export class RegistrationService {
 
   private basePath = '1Qqm9ql9vdEIGM-FTVjN5lGzuefb0aPedKQTv3rZQrOM/detailed22082019';
+  private planPath = '1RE-TyrVztwTAl3dePbnNjWtscclkinRDCQ-bhI1Hkc4/Plan092019';
   registrations: Observable<Registration[]> = null;
   registrationsRDMS: Observable<RegistrationRdms[]>;
   registrationsMSISDN: Observable<RegistrationMsisdn[]>;
+  registrationsPlan: Observable<RegistrationPlan[]>;
 
   constructor(private db: AngularFireDatabase) {
   }
@@ -22,6 +25,30 @@ export class RegistrationService {
   getRegistrationsList(): Observable<Registration[]> {
     this.registrations = this.db.list<Registration>(this.basePath).valueChanges();
     return this.registrations;
+  }
+
+  getRegistrationsPlan(): Observable<RegistrationPlan[]> {
+    const pMap: Map<number, RegistrationPlan> = new Map<number, RegistrationPlan>();
+    this.registrationsPlan =  this.db.list<RegistrationPlan>(this.planPath).valueChanges().pipe(
+      map( data => {
+        data.forEach(rPlan => {
+          pMap.set(rPlan.codeMSISDN, rPlan);
+        });
+        this.getRegistrationsMSISDN().subscribe(d => {
+          d.forEach(value => {
+            if (pMap.has(value.codeMSISDN)) {
+              const registrationPlan = pMap.get(value.codeMSISDN);
+              registrationPlan.nameSeller = value.nameSeller;
+              registrationPlan.allCount = value.allCount;
+              registrationPlan.onCheckingCount = value.onCheckingCount;
+              registrationPlan.checkedDudCount = value.checkedDudCount;
+            }
+          });
+        });
+        return Array.from(pMap.values());
+      })
+    );
+    return this.registrationsPlan;
   }
 
   getRegistrationsRDMS(): Observable<RegistrationRdms[]> {
