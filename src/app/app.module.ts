@@ -11,6 +11,7 @@ import {AppRoutingModule} from './app-routing.module';
 import { RegistrationsListComponent } from './registrations/registrations-list/registrations-list.component';
 import { RegistrationDetailComponent } from './registrations/registration-detail/registration-detail.component';
 import {AngularFireDatabaseModule} from '@angular/fire/database';
+import { RegistrationRdmsComponent } from './registrations/registration-rdms/registration-rdms.component';
 // import {AppRoutingModule} from './app-routing/app-routing.module';
 // import {HttpClientModule} from '@angular/common/http';
 // import {FormsModule} from '@angular/forms';
@@ -30,7 +31,8 @@ const firebaseConfig = {
     AppComponent,
     DetailedComponent,
     RegistrationsListComponent,
-    RegistrationDetailComponent
+    RegistrationDetailComponent,
+    RegistrationRdmsComponent
   ],
   imports: [
     BrowserModule,

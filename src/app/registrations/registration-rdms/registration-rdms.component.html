@@ -1,0 +1,20 @@
+<h1>RDMS</h1>
+
+<table>
+  <thead>
+  <tr>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let reg of registrationsRdms | async">
+    <td>{{reg.codeRDMS}}</td>
+    <td>{{reg.nameRDMS}}</td>
+    <td>{{reg.addressRDMS}}</td>
+    <td>{{reg.typeRDMS}}</td>
+    <td>{{reg.namePPD}}</td>
+    <td>{{reg.allCount}}</td>
+    <td>{{reg.onCheckingCount}}</td>
+    <td>{{reg.checkedDudCount}}</td>
+  </tr>
+</table>
