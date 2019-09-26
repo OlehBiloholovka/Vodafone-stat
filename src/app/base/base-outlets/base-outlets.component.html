@@ -1,0 +1,38 @@
+<h1>OUTLETS</h1>
+
+<table>
+  <thead>
+  <tr>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let outlet of outlets | async">
+    <td>{{outlet.codeRDMS}}</td>
+    <td>{{outlet.region}}</td>
+    <td>{{outlet.oblast}}</td>
+    <td>{{outlet.raion}}</td>
+    <td>{{outlet.misto}}</td>
+    <td>{{outlet.population}}</td>
+    <td>{{outlet.categoryMisto}}</td>
+    <td>{{outlet.coverage}}</td>
+    <td>{{outlet.typeRDMS}}</td>
+    <td>{{outlet.descriptionRDMS}}</td>
+    <td>{{outlet.squareRDMS}}</td>
+    <td>{{outlet.faceRDMS}}</td>
+    <td>{{outlet.categoryRDMS}}</td>
+    <td>{{outlet.salesChannel}}</td>
+    <td>{{outlet.counterpart}}</td>
+    <td>{{outlet.nameRDMS}}</td>
+    <td>{{outlet.addressRDMS}}</td>
+    <td>{{outlet.nameCompany}}</td>
+    <td>{{outlet.addressCompany}}</td>
+    <td>{{outlet.namePPD}}</td>
+    <td>{{outlet.idPPD}}</td>
+    <td>{{outlet.expert}}</td>
+    <td>{{outlet.latitude}}</td>
+    <td>{{outlet.longitude}}</td>
+    <td>{{outlet.outlet}}</td>
+    <td>{{outlet.cashRegistersCount}}</td>
+  </tr>
+</table>

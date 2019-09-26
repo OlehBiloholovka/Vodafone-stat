@@ -1,0 +1,29 @@
+export class Outlet {
+  id: number;
+  codeRDMS: number;
+  region: string;
+  oblast: string;
+  raion: string;
+  misto: string;
+  population: number;
+  categoryMisto: string;
+  coverage: string;
+  typeRDMS: string;
+  descriptionRDMS: string;
+  squareRDMS: string;
+  faceRDMS: string;
+  categoryRDMS: string;
+  salesChannel: string;
+  counterpart: string;
+  nameRDMS: string;
+  addressRDMS: string;
+  nameCompany: string;
+  addressCompany: string;
+  namePPD: string;
+  idPPD: number;
+  expert: string;
+  latitude: string;
+  longitude: string;
+  outlet: string;
+  cashRegistersCount: string;
+}
