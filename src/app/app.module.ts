@@ -14,6 +14,7 @@ import {AngularFireDatabaseModule} from '@angular/fire/database';
 import { RegistrationRdmsComponent } from './registrations/registration-rdms/registration-rdms.component';
 import { RegistrationMsisdnComponent } from './registrations/registration-msisdn/registration-msisdn.component';
 import { RegistrationPlanComponent } from './registrations/registration-plan/registration-plan.component';
+import { BaseOutletsComponent } from './base/base-outlets/base-outlets.component';
 // import {AppRoutingModule} from './app-routing/app-routing.module';
 // import {HttpClientModule} from '@angular/common/http';
 // import {FormsModule} from '@angular/forms';
@@ -36,7 +37,8 @@ const firebaseConfig = {
     RegistrationDetailComponent,
     RegistrationRdmsComponent,
     RegistrationMsisdnComponent,
-    RegistrationPlanComponent
+    RegistrationPlanComponent,
+    BaseOutletsComponent
   ],
   imports: [
     BrowserModule,

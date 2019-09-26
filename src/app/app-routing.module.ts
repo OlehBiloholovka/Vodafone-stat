@@ -5,6 +5,7 @@ import {RegistrationsListComponent} from './registrations/registrations-list/reg
 import {RegistrationRdmsComponent} from './registrations/registration-rdms/registration-rdms.component';
 import {RegistrationMsisdnComponent} from './registrations/registration-msisdn/registration-msisdn.component';
 import {RegistrationPlanComponent} from './registrations/registration-plan/registration-plan.component';
+import {BaseOutletsComponent} from './base/base-outlets/base-outlets.component';
 
 const routes: Routes = [
   {
@@ -26,6 +27,10 @@ const routes: Routes = [
   {
     path: 'plan',
     component: RegistrationPlanComponent,
+  },
+  {
+    path: 'outlets',
+    component: BaseOutletsComponent,
   },
 ];
 
