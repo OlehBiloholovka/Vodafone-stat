@@ -33,7 +33,7 @@
   </tr>
   </thead>
   <tbody>
-  <tr *ngFor="let reg of filteredRegistrationsMSISDN$ | async">
+  <tr *ngFor="let reg of filteredRegistrationsMSISDN$ | async" [ngStyle]=getStyle(reg)>
     <td>{{reg.codeMSISDN}}</td>
     <td>{{reg.nameSeller}}</td>
     <td>{{reg.codeRDMS}}</td>

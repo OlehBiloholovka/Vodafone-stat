@@ -4,6 +4,7 @@ import {RegistrationMsisdn} from '../shared/registration-msisdn';
 import {RegistrationService} from '../shared/registration.service';
 import {RegistrationRdms} from '../shared/registration-rdms';
 import {FormControl} from '@angular/forms';
+import {RegistrationPlan} from '../shared/registration-plan';
 
 @Component({
   selector: 'app-registration-msisdn',
@@ -59,4 +60,31 @@ export class RegistrationMsisdnComponent implements OnInit {
     this.bMayCompletedPlanCount$ = this.rs.getMayCompletedPlanCount(this.registrationsMSISDN$, this.namePPDFilterValue, 'B');
   }
 
+  private getStyle(rp: RegistrationMsisdn): {} {
+    if (rp.isCompleted) {
+      return {
+        'background-color': 'green',
+        color: 'white'
+      };
+    }
+    if (rp.mayBeCompleted) {
+      return {
+        'background-color': 'orange',
+        color: 'blue'
+      };
+    }
+    if (rp.toMakeUnchecked <= 3 && rp.allCount !== 0) {
+      return {
+        'background-color': 'yellow',
+        color: 'blue'
+      };
+    }
+    if (rp.allCount === 0) {
+      return {
+        'background-color': 'red',
+        color: 'white'
+      };
+    }
+    return {};
+  }
 }
