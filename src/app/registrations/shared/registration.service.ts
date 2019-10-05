@@ -173,7 +173,20 @@ export class RegistrationService {
           });
           return Array.from(registrationRDMSMap.values());
         }
-      )
+      ),
+      map(data => data.sort((a, b) => {
+        let result: number = b.toMakeUnchecked - a.toMakeUnchecked;
+        if (result === 0 || a.isCompleted || b.isCompleted) {
+          result = b.toMake - a.toMake;
+        }
+        if (a.allCount === 0 || b.allCount === 0) {
+          result = a.allCount - b.allCount;
+          if (result === 0) {
+            result = b.toMake - a.toMake;
+          }
+        }
+        return result;
+      })),
     );
     return this.registrationsRDMS$;
   }
@@ -210,7 +223,20 @@ export class RegistrationService {
           });
           return Array.from(registrationMSISDNMap.values());
         }
-      )
+      ),
+      map(data => data.sort((a, b) => {
+        let result: number = b.toMakeUnchecked - a.toMakeUnchecked;
+        if (result === 0 || a.isCompleted || b.isCompleted) {
+          result = b.toMake - a.toMake;
+        }
+        if (a.allCount === 0 || b.allCount === 0) {
+          result = a.allCount - b.allCount;
+          if (result === 0) {
+            result = b.toMake - a.toMake;
+          }
+        }
+        return result;
+      })),
     );
     return this.registrationsMSISDN;
   }
