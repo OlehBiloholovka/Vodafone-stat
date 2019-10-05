@@ -15,6 +15,7 @@ import { RegistrationRdmsComponent } from './registrations/registration-rdms/reg
 import { RegistrationMsisdnComponent } from './registrations/registration-msisdn/registration-msisdn.component';
 import { RegistrationPlanComponent } from './registrations/registration-plan/registration-plan.component';
 import { BaseOutletsComponent } from './base/base-outlets/base-outlets.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 // import {AppRoutingModule} from './app-routing/app-routing.module';
 // import {HttpClientModule} from '@angular/common/http';
 // import {FormsModule} from '@angular/forms';
@@ -48,6 +49,8 @@ const firebaseConfig = {
     AngularFireAuthModule, // auth
     AngularFireStorageModule, // storage
     AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
     // AppRoutingModule, // routing
     // HttpClientModule, // http client
     // FormsModule, // forms module

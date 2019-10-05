@@ -1,4 +1,30 @@
 <h1>RDMS</h1>
+<br>
+<p>
+  Усіх партнерів категорії А: {{aAllPlanCount$ | async}}
+  <span>Виконало план кат. А: {{aCompletedPlanCount$ | async}} </span>
+  <span>Без перевірки ДУД кат. А: {{aMayCompletedPlanCount$ | async}}</span>
+  <span> {{(aCompletedPlanCount$ | async)/(aAllPlanCount$ | async) | percent}}</span>
+</p>
+<p>
+  Усіх партнерів категорії B: {{bAllPlanCount$ | async}}
+  <span>Виконало план кат. B: {{bCompletedPlanCount$ | async}} </span>
+  <span>Без перевірки ДУД кат. B: {{bMayCompletedPlanCount$ | async}}</span>
+  <span> {{(bCompletedPlanCount$ | async)/(bAllPlanCount$ | async) | percent}}</span>
+</p>
+<input type="text" [formControl]="inputFilterValue" placeholder="Filter ...">
+<select [formControl]="namePPDFilterValue">
+  <option [value]="''">--Select--</option>
+  <option *ngFor="let reg of namePPDList$ | async" [value]="reg.namePPD">{{reg.namePPD}}</option>
+</select>
+<select [formControl]="typeRDMSFilterValue">
+  <option value="">A/B</option>
+  <option value="A">A</option>
+  <option value="B">B</option>
+</select>
+<select [formControl]="registrationsFilterValue" [multiple]="true">
+  <option *ngFor="let el of dropdownList" [value]="el['item_id']">{{el['item_text']}}</option>
+</select>
 
 <table>
   <thead>
@@ -7,7 +33,7 @@
   </tr>
   </thead>
   <tbody>
-  <tr *ngFor="let reg of registrationsRdms | async">
+  <tr *ngFor="let reg of filteredRegistrationsRdms$ | async">
     <td>{{reg.codeRDMS}}</td>
     <td>{{reg.nameRDMS}}</td>
     <td>{{reg.addressRDMS}}</td>
@@ -16,5 +42,8 @@
     <td>{{reg.allCount}}</td>
     <td>{{reg.onCheckingCount}}</td>
     <td>{{reg.checkedDudCount}}</td>
+    <td>{{reg.plan}}</td>
+    <td>{{reg.toMake}}</td>
+    <td>{{reg.toMakeUnchecked}}</td>
   </tr>
 </table>
