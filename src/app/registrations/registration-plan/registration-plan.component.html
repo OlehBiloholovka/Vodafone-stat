@@ -12,19 +12,27 @@
   <span>Без перевірки ДУД кат. B: {{bMayCompletedPlanCount$ | async}}</span>
   <span> {{(bCompletedPlanCount$ | async)/(bAllPlanCount$ | async) | percent}}</span>
 </p>
-<input type="text" [formControl]="inputFilterValue" placeholder="Filter ...">
-<select [formControl]="namePPDFilterValue">
-  <option [value]="''">--Select--</option>
-  <option *ngFor="let reg of namePPDList$ | async" [value]="reg.namePPD">{{reg.namePPD}}</option>
-</select>
-<select [formControl]="typeRDMSFilterValue">
-  <option value="">A/B</option>
-  <option value="A">A</option>
-  <option value="B">B</option>
-</select>
-<select [formControl]="registrationsFilterValue" [multiple]="true">
-  <option *ngFor="let el of dropdownList" [value]="el['item_id']">{{el['item_text']}}</option>
-</select>
+<label>
+  <input type="text" [formControl]="inputFilterValue" placeholder="Filter ...">
+</label>
+<label>
+  <select [formControl]="namePPDFilterValue">
+    <option [value]="''">--Select--</option>
+    <option *ngFor="let reg of namePPDList$ | async" [value]="reg.namePPD">{{reg.namePPD}}</option>
+  </select>
+</label>
+<label>
+  <select [formControl]="typeRDMSFilterValue">
+    <option value="">A/B</option>
+    <option value="A">A</option>
+    <option value="B">B</option>
+  </select>
+</label>
+<label>
+  <select [formControl]="registrationsFilterValue" [multiple]="true">
+    <option *ngFor="let el of dropdownList" [value]="el['item_id']">{{el['item_text']}}</option>
+  </select>
+</label>
 
 <table>
   <thead>
@@ -33,7 +41,7 @@
   </tr>
   </thead>
   <tbody>
-  <tr *ngFor="let reg of filteredRegistrationsPlan$ | async" [ngStyle]=getStyle(reg)>
+  <tr *ngFor="let reg of filteredRegistrationsPlan$ | async" [ngStyle]=getStyle(reg) (click)="toRegistrationsDetailed(reg.codeMSISDN)">
     <td>{{reg.codeMSISDN}}</td>
     <td>{{reg.nameSeller}}</td>
     <td>{{reg.codeRDMS}}</td>

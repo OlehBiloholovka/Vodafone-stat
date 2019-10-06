@@ -4,6 +4,7 @@ import {RegistrationService} from '../shared/registration.service';
 import {RegistrationPlan} from '../shared/registration-plan';
 import {RegistrationRdms} from '../shared/registration-rdms';
 import {FormControl} from '@angular/forms';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-registration-plan',
@@ -28,7 +29,7 @@ export class RegistrationPlanComponent implements OnInit {
   protected namePPDList$: Observable<RegistrationRdms[]>;
   protected dropdownList: any[];
 
-  constructor(private rs: RegistrationService) { }
+  constructor(private rs: RegistrationService, private router: Router) { }
 
   ngOnInit() {
     this.rs.getRegistrationFilter(this);
@@ -41,6 +42,10 @@ export class RegistrationPlanComponent implements OnInit {
 
   private getStyle(rp: RegistrationRdms): {} {
     return this.rs.getStyle(rp);
+  }
+
+  toRegistrationsDetailed(codeMSISDN: number) {
+    this.router.navigate(['registrations/', codeMSISDN]).catch(console.log);
   }
 
 }

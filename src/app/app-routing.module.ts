@@ -17,6 +17,10 @@ const routes: Routes = [
     component: RegistrationsListComponent,
   },
   {
+    path: 'registrations/:id',
+    component: RegistrationsListComponent,
+  },
+  {
     path: 'rdms',
     component: RegistrationRdmsComponent,
   },

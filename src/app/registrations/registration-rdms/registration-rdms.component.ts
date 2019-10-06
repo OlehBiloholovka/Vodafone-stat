@@ -3,6 +3,7 @@ import {Observable} from 'rxjs';
 import {RegistrationService} from '../shared/registration.service';
 import {RegistrationRdms} from '../shared/registration-rdms';
 import {FormControl} from '@angular/forms';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-registration-rdms',
@@ -27,7 +28,7 @@ export class RegistrationRdmsComponent implements OnInit {
   protected registrationsFilterValue: FormControl = new FormControl('');
   protected namePPDList$: Observable<RegistrationRdms[]>;
   protected dropdownList: any[];
-  constructor(private rs: RegistrationService) { }
+  constructor(private rs: RegistrationService, private router: Router) { }
 
   ngOnInit() {
     this.rs.getRegistrationFilter(this);
@@ -40,5 +41,9 @@ export class RegistrationRdmsComponent implements OnInit {
 
   private getStyle(rp: RegistrationRdms): {} {
     return  this.rs.getStyle(rp);
+  }
+
+  toRegistrationsDetailed(codeRDMS: number) {
+    this.router.navigate(['registrations/', codeRDMS]).catch(console.log);
   }
 }

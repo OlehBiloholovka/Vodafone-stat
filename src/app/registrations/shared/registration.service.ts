@@ -69,7 +69,7 @@ export class RegistrationService {
   getFilteredList<T>(oList: Observable<T[]>, inputFilterValue: FormControl,
                      namePPDFilterValue: FormControl, typeRDMSFilterValue: FormControl,
                      planFilterValue: FormControl = new FormControl([-1])): Observable<T[]> {
-    const inputFilter$ = inputFilterValue.valueChanges.pipe(startWith(''));
+    const inputFilter$ = inputFilterValue.valueChanges.pipe(startWith(inputFilterValue.value ? inputFilterValue.value : ''));
     const namePPDFilter$ = namePPDFilterValue.valueChanges.pipe(startWith(namePPDFilterValue.value));
     const typeRDMSFilter$ = typeRDMSFilterValue.valueChanges.pipe(startWith(typeRDMSFilterValue.value));
     const planFilter$: Observable<number[]> = planFilterValue.valueChanges.pipe(startWith(planFilterValue.value));
