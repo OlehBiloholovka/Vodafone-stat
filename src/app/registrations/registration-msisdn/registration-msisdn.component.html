@@ -5,12 +5,14 @@
   <span>Виконало план кат. А: {{aCompletedPlanCount$ | async}} </span>
   <span>Без перевірки ДУД кат. А: {{aMayCompletedPlanCount$ | async}}</span>
   <span> {{(aCompletedPlanCount$ | async)/(aAllPlanCount$ | async) | percent}}</span>
+  <span>({{(aMayCompletedPlanCount$ | async)/(aAllPlanCount$ | async) | percent}})</span>
 </p>
 <p>
   Усіх партнерів категорії B: {{bAllPlanCount$ | async}}
   <span>Виконало план кат. B: {{bCompletedPlanCount$ | async}} </span>
   <span>Без перевірки ДУД кат. B: {{bMayCompletedPlanCount$ | async}}</span>
   <span> {{(bCompletedPlanCount$ | async)/(bAllPlanCount$ | async) | percent}}</span>
+  <span>({{(bMayCompletedPlanCount$ | async)/(bAllPlanCount$ | async) | percent}})</span>
 </p>
 <label>
   <input type="text" [formControl]="inputFilterValue" placeholder="Filter ...">

@@ -32,7 +32,7 @@ export class RegistrationRdmsComponent implements OnInit {
 
   ngOnInit() {
     this.rs.getRegistrationFilter(this);
-    this.registrationsRdms$ = this.rs.getRegistrationsRDMS();
+    this.registrationsRdms$ = this.rs.getRegistrationsRDMS1();
     this.filteredRegistrationsRdms$ = this.rs
       .getFilteredList(this.registrationsRdms$, this.inputFilterValue, this.namePPDFilterValue, this.typeRDMSFilterValue
         , this.registrationsFilterValue);

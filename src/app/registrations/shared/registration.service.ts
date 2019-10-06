@@ -31,6 +31,7 @@ export class RegistrationService {
   registrationsMSISDN$: Observable<RegistrationMsisdn[]>;
   registrationsPlan$: Observable<RegistrationPlan[]>;
 
+
   private static calculateCheckedRegistrations<T extends RegistrationRdms>(r: T) {
     r.toMake = r.getToMake();
     r.toMakeUnchecked = r.getToMakeUnchecked();
@@ -192,6 +193,31 @@ export class RegistrationService {
       map(data => data.sort(this.compareRegistrations())),
     );
     return this.registrationsPlan$;
+  }
+
+  getRegistrationsRDMS1(): Observable<RegistrationRdms[]> {
+    // const rPlans = this.db.list<RegistrationPlan>(this.planPath).valueChanges();
+    const r = this.getRegistrationsRDMS();
+    const outlets = this.os.getOutletsList().pipe(
+      map(data => data.filter(value => value.salesChannel === 'Дистрибьютор'))
+    );
+    this.registrationsRDMS$ = combineLatest(outlets, r).pipe(
+      map(([ol, rm]) => ol.map(o => {
+        const rRDMS: RegistrationRdms = Object
+          .assign(new RegistrationRdms(), o, rm.find(m => o.codeRDMS === m.codeRDMS));
+        // if (!rPlan.allCount) {
+        //   rPlan.allCount = 0;
+        //   rPlan.onCheckingCount = 0;
+        //   rPlan.checkedDudCount = 0;
+        // }
+        // if (!rRDMS.typeRDMS) { rRDMS.typeRDMS = ''; }
+        // rRDMS.plan = o.plan;
+        RegistrationService.calculateCheckedRegistrations(rRDMS);
+        return rRDMS;
+      })),
+      map(data => data.sort(this.compareRegistrations())),
+    );
+    return this.registrationsRDMS$;
   }
 
   getRegistrationsRDMS(): Observable<RegistrationRdms[]> {
