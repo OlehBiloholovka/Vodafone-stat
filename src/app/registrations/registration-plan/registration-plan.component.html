@@ -35,6 +35,7 @@
     <option *ngFor="let el of dropdownList" [value]="el['item_id']">{{el['item_text']}}</option>
   </select>
 </label>
+<p>Кількість: {{(filteredRegistrationsPlan$ | async)?.length}}</p>
 
 <table>
   <thead>
