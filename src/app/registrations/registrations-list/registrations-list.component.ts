@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Observable} from 'rxjs';
 import {RegistrationService} from '../shared/registration.service';
-import {Registration} from '../shared/registration';
+import {RegistrationDetailed} from '../shared/registration-detailed';
 import {RegistrationRdms} from '../shared/registration-rdms';
 import {FormControl} from '@angular/forms';
 
@@ -12,9 +12,9 @@ import {FormControl} from '@angular/forms';
 })
 export class RegistrationsListComponent implements OnInit {
 
-  private registrations$: Observable<Registration[]>;
+  private registrations$: Observable<RegistrationDetailed[]>;
 
-  public filteredRegistrations$: Observable<Registration[]>;
+  public filteredRegistrations$: Observable<RegistrationDetailed[]>;
 
   protected inputFilterValue: FormControl = new FormControl('');
   protected namePPDFilterValue: FormControl = new FormControl('');

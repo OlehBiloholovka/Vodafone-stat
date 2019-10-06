@@ -27,63 +27,20 @@ export class RegistrationPlanComponent implements OnInit {
   protected registrationsFilterValue: FormControl = new FormControl('');
   protected namePPDList$: Observable<RegistrationRdms[]>;
   protected dropdownList: any[];
-  protected selectedDropdownList: number[];
 
   constructor(private rs: RegistrationService) { }
 
   ngOnInit() {
-    this.dropdownList = [
-      { item_id: 0, item_text: 'Без реєстрацій' },
-      { item_id: 1, item_text: 'План виконано' },
-      { item_id: 2, item_text: 'Можливе виконання' },
-      { item_id: 3, item_text: 'До виконання <4' },
-      { item_id: 4, item_text: 'Інші' }
-    ];
-    this.selectedDropdownList = this.dropdownList.map(value => value.item_id);
-    this.registrationsFilterValue.setValue(this.selectedDropdownList);
+    this.rs.getRegistrationFilter(this);
     this.registrationsPlan$ = this.rs.getRegistrationsPlan();
     this.filteredRegistrationsPlan$ = this.rs
       .getFilteredList(this.registrationsPlan$, this.inputFilterValue, this.namePPDFilterValue,
         this.typeRDMSFilterValue, this.registrationsFilterValue);
-    this.namePPDList$ = this.rs.getNamesPPD();
-    this.countPlan();
+    this.rs.countPlan(this, this.registrationsPlan$, this.namePPDFilterValue);
   }
 
-  countPlan() {
-    this.aAllPlanCount$ = this.rs.getAllPlanCount(this.registrationsPlan$, this.namePPDFilterValue, 'A');
-    this.bAllPlanCount$ = this.rs.getAllPlanCount(this.registrationsPlan$, this.namePPDFilterValue, 'B');
-    this.aCompletedPlanCount$ = this.rs.getCompletedPlanCount(this.registrationsPlan$, this.namePPDFilterValue, 'A');
-    this.bCompletedPlanCount$ = this.rs.getCompletedPlanCount(this.registrationsPlan$, this.namePPDFilterValue, 'B');
-    this.aMayCompletedPlanCount$ = this.rs.getMayCompletedPlanCount(this.registrationsPlan$, this.namePPDFilterValue, 'A');
-    this.bMayCompletedPlanCount$ = this.rs.getMayCompletedPlanCount(this.registrationsPlan$, this.namePPDFilterValue, 'B');
-  }
-
-  private getStyle(rp: RegistrationPlan): {} {
-    if (rp.isCompleted) {
-      return {
-        'background-color': 'green',
-        color: 'white'
-      };
-    }
-    if (rp.mayBeCompleted) {
-      return {
-        'background-color': 'orange',
-        color: 'blue'
-      };
-    }
-    if (rp.toMakeUnchecked <= 3 && rp.allCount !== 0) {
-      return {
-        'background-color': 'yellow',
-        color: 'blue'
-      };
-    }
-    if (rp.allCount === 0) {
-      return {
-        'background-color': 'red',
-        color: 'white'
-      };
-    }
-    return {};
+  private getStyle(rp: RegistrationRdms): {} {
+    return this.rs.getStyle(rp);
   }
 
 }

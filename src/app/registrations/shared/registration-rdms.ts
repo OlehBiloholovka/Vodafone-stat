@@ -1,9 +1,6 @@
-export class RegistrationRdms {
-  addressRDMS: string;
-  codeRDMS: number;
-  nameRDMS: string;
-  namePPD: string;
-  typeRDMS: string;
+import {Registration} from './registration';
+
+export class RegistrationRdms extends Registration {
   allCount: number;
   onCheckingCount: number;
   checkedDudCount: number;
@@ -14,6 +11,7 @@ export class RegistrationRdms {
   mayBeCompleted: boolean;
 
   constructor() {
+    super();
     this.allCount = 0;
     this.onCheckingCount = 0;
     this.checkedDudCount = 0;

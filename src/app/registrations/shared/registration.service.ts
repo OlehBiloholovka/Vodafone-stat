@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {AngularFireDatabase} from '@angular/fire/database';
 import {combineLatest, Observable} from 'rxjs';
-import {Registration} from './registration';
+import {RegistrationDetailed} from './registration-detailed';
 import {RegistrationRdms} from './registration-rdms';
 import {RegistrationMsisdn} from './registration-msisdn';
 import {RegistrationPlan} from './registration-plan';
@@ -14,6 +14,10 @@ import {FormControl} from '@angular/forms';
 })
 export class RegistrationService {
 
+
+  constructor(private db: AngularFireDatabase, private os: OutletService) {
+  }
+
   private basePath = '1Qqm9ql9vdEIGM-FTVjN5lGzuefb0aPedKQTv3rZQrOM/detailed30092019';
   private planPath = '1RE-TyrVztwTAl3dePbnNjWtscclkinRDCQ-bhI1Hkc4/Plan092019';
   private namePPDPropertyName = 'namePPD';
@@ -22,18 +26,32 @@ export class RegistrationService {
   private isCompletedPropertyName = 'isCompleted';
   private mayBeCompletedPropertyName = 'mayBeCompleted';
   private toMakeUncheckedPropertyName = 'toMakeUnchecked';
-  registrations: Observable<Registration[]> = null;
+  registrations$: Observable<RegistrationDetailed[]> = null;
   registrationsRDMS$: Observable<RegistrationRdms[]>;
-  registrationsMSISDN: Observable<RegistrationMsisdn[]>;
-  registrationsPlan: Observable<RegistrationPlan[]>;
+  registrationsMSISDN$: Observable<RegistrationMsisdn[]>;
+  registrationsPlan$: Observable<RegistrationPlan[]>;
 
-
-  constructor(private db: AngularFireDatabase, private os: OutletService) {
+  private static calculateCheckedRegistrations<T extends RegistrationRdms>(r: T) {
+    r.toMake = r.getToMake();
+    r.toMakeUnchecked = r.getToMakeUnchecked();
+    r.isCompleted = r.getIsCompleted();
+    r.mayBeCompleted = r.getMayBeCompleted();
   }
 
-  getRegistrationsList(): Observable<Registration[]> {
-    this.registrations = this.db.list<Registration>(this.basePath).valueChanges();
-    return this.registrations;
+  private static countCheckedRegistrations<T extends RegistrationRdms>(r: T, reg: RegistrationDetailed) {
+    r.allCount++;
+    if (reg.checkDud === 'Ок') {
+      r.checkedDudCount++;
+    }
+    if (reg.checkDud === 'Не отправлено' && (reg.rejectReason === 'Успешно' || reg.rejectReason === 'В работе')) {
+      r.onCheckingCount++;
+    }
+    RegistrationService.calculateCheckedRegistrations(r);
+  }
+
+  getRegistrationsList(): Observable<RegistrationDetailed[]> {
+    this.registrations$ = this.db.list<RegistrationDetailed>(this.basePath).valueChanges();
+    return this.registrations$;
   }
 
   getFilterValues(propertyName: string): Observable<RegistrationRdms[]> {
@@ -79,31 +97,84 @@ export class RegistrationService {
     );
   }
 
-  private calculatePlan<T>(oList: Observable<T[]>, namePPDFilterValue: FormControl, typeRDMS: string,
+  private calculatePlan<T>(oList$: Observable<T[]>, namePPDFilterValue: FormControl, typeRDMS: string,
                            completing?: number[]): Observable<number> {
     const planFilterValue: FormControl = completing ? new FormControl(completing) : undefined;
-    return  this.getFilteredList(oList, new FormControl(), namePPDFilterValue, new FormControl(typeRDMS), planFilterValue).pipe(
+    return  this.getFilteredList(oList$, new FormControl(), namePPDFilterValue, new FormControl(typeRDMS), planFilterValue).pipe(
       map(data => data.length)
     );
   }
 
-  getAllPlanCount<T>(oList: Observable<T[]>, namePPDFilterValue: FormControl, typeRDMS: string) {
-    return this.calculatePlan(oList, namePPDFilterValue, typeRDMS);
+  private getAllPlanCount<T>(oList$: Observable<T[]>, namePPDFilterValue: FormControl, typeRDMS: string) {
+    return this.calculatePlan(oList$, namePPDFilterValue, typeRDMS);
   }
 
-  getCompletedPlanCount<T>(oList: Observable<T[]>, namePPDFilterValue: FormControl, typeRDMS: string) {
-    return this.calculatePlan(oList, namePPDFilterValue, typeRDMS, [1]);
+  private getCompletedPlanCount<T>(oList$: Observable<T[]>, namePPDFilterValue: FormControl, typeRDMS: string) {
+    return this.calculatePlan(oList$, namePPDFilterValue, typeRDMS, [1]);
   }
 
-  getMayCompletedPlanCount<T>(oList: Observable<T[]>, namePPDFilterValue: FormControl, typeRDMS: string) {
-    return this.calculatePlan(oList, namePPDFilterValue, typeRDMS, [1, 2]);
+  private getMayCompletedPlanCount<T>(oList$: Observable<T[]>, namePPDFilterValue: FormControl, typeRDMS: string) {
+    return this.calculatePlan(oList$, namePPDFilterValue, typeRDMS, [1, 2]);
+  }
+
+  countPlan<T>(component, oList$: Observable<T[]>, namePPDFilterValue: FormControl) {
+    component.aAllPlanCount$ = this.getAllPlanCount(oList$, namePPDFilterValue, 'A');
+    component.bAllPlanCount$ = this.getAllPlanCount(oList$, namePPDFilterValue, 'B');
+    component.aCompletedPlanCount$ = this.getCompletedPlanCount(oList$, namePPDFilterValue, 'A');
+    component.bCompletedPlanCount$ = this.getCompletedPlanCount(oList$, namePPDFilterValue, 'B');
+    component.aMayCompletedPlanCount$ = this.getMayCompletedPlanCount(oList$, namePPDFilterValue, 'A');
+    component.bMayCompletedPlanCount$ = this.getMayCompletedPlanCount(oList$, namePPDFilterValue, 'B');
+  }
+
+  getDropdownList(): {item_id: number, item_text: string}[] {
+    return [
+      { item_id: 0, item_text: 'Без реєстрацій' },
+      { item_id: 1, item_text: 'План виконано' },
+      { item_id: 2, item_text: 'Можливе виконання' },
+      { item_id: 3, item_text: 'До виконання <4' },
+      { item_id: 4, item_text: 'Інші' }
+    ];
+  }
+
+  getRegistrationFilter(component) {
+    component.dropdownList = this.getDropdownList();
+    component.registrationsFilterValue.setValue(component.dropdownList.map(value => value.item_id));
+    component.namePPDList$ = this.getNamesPPD();
+  }
+
+  getStyle(rp: RegistrationRdms): {} {
+    if (rp.isCompleted) {
+      return {
+        'background-color': 'green',
+        color: 'white'
+      };
+    }
+    if (rp.mayBeCompleted) {
+      return {
+        'background-color': 'orange',
+        color: 'blue'
+      };
+    }
+    if (rp.toMakeUnchecked <= 3 && rp.allCount !== 0) {
+      return {
+        'background-color': 'yellow',
+        color: 'blue'
+      };
+    }
+    if (rp.allCount === 0) {
+      return {
+        'background-color': 'red',
+        color: 'white'
+      };
+    }
+    return {};
   }
 
   getRegistrationsPlan(): Observable<RegistrationPlan[]> {
     const rPlans = this.db.list<RegistrationPlan>(this.planPath).valueChanges();
-    const rMSISDN = this.getRegistrationsMSISDN();
+    const r = this.getRegistrationsMSISDN();
     const outlets = this.os.getOutletsList();
-    return combineLatest(rPlans, rMSISDN, outlets).pipe(
+    this.registrationsPlan$ = combineLatest(rPlans, r, outlets).pipe(
       map(([rp, rm, ol]) => rp.map(p => {
         const rPlan: RegistrationPlan = Object
           .assign(new RegistrationPlan(), p, rm.find(m => p.codeMSISDN === m.codeMSISDN),
@@ -115,31 +186,12 @@ export class RegistrationService {
         // }
         if (!rPlan.typeRDMS) { rPlan.typeRDMS = ''; }
         rPlan.plan = p.plan;
-        rPlan.toMake = rPlan.getToMake();
-        rPlan.toMakeUnchecked = rPlan.getToMakeUnchecked();
-        rPlan.isCompleted = rPlan.getIsCompleted();
-        rPlan.mayBeCompleted = rPlan.getMayBeCompleted();
-        // rPlan.isCompleted = rPlan.checkedDudCount >= rPlan.plan;
-        // rPlan.mayBeCompleted = (rPlan.checkedDudCount
-        //   + rPlan.onCheckingCount) >= rPlan.plan;
-        // rPlan.toMake = rPlan.checkedDudCount - rPlan.plan;
-        // rPlan.toMakeUnchecked = rPlan.toMake + rPlan.onCheckingCount;
+        RegistrationService.calculateCheckedRegistrations(rPlan);
         return rPlan;
       })),
-      map(data => data.sort((a, b) => {
-        let result: number = b.toMakeUnchecked - a.toMakeUnchecked;
-        if (result === 0 || a.isCompleted || b.isCompleted) {
-          result = b.toMake - a.toMake;
-        }
-        if (a.allCount === 0 || b.allCount === 0) {
-          result = a.allCount - b.allCount;
-          if (result === 0) {
-            result = b.toMake - a.toMake;
-          }
-        }
-        return result;
-      })),
+      map(data => data.sort(this.compareRegistrations())),
     );
+    return this.registrationsPlan$;
   }
 
   getRegistrationsRDMS(): Observable<RegistrationRdms[]> {
@@ -148,56 +200,32 @@ export class RegistrationService {
         data => {
           const registrationRDMSMap = new Map<number, RegistrationRdms>();
           data.map(reg => {
-            let rRdms = new RegistrationRdms();
+            const r = new RegistrationRdms();
             if (!registrationRDMSMap.has(reg.codeRDMS)) {
-              rRdms.namePPD = reg.namePPD;
-              rRdms.codeRDMS = reg.codeRDMS;
-              rRdms.nameRDMS = reg.nameRDMS;
-              rRdms.addressRDMS = reg.addressRDMS;
-              rRdms.typeRDMS = reg.typeRDMS;
-              registrationRDMSMap.set(reg.codeRDMS, rRdms);
+              r.namePPD = reg.namePPD;
+              r.codeRDMS = reg.codeRDMS;
+              r.nameRDMS = reg.nameRDMS;
+              r.addressRDMS = reg.addressRDMS;
+              r.typeRDMS = reg.typeRDMS;
+              registrationRDMSMap.set(reg.codeRDMS, r);
             }
-            rRdms = registrationRDMSMap.get(reg.codeRDMS);
-            rRdms.allCount++;
-            if (reg.checkDud === 'Ок') {
-              rRdms.checkedDudCount++;
-            }
-            if (reg.checkDud === 'Не отправлено' && (reg.rejectReason === 'Успешно' || reg.rejectReason === 'В работе')) {
-              rRdms.onCheckingCount++;
-            }
-            // rRdms.plan = rRdms.typeRDMS.charAt(0) === 'A' ? 5 : 0;
-            rRdms.toMake = rRdms.getToMake();
-            rRdms.toMakeUnchecked = rRdms.getToMakeUnchecked();
-            rRdms.isCompleted = rRdms.getIsCompleted();
-            rRdms.mayBeCompleted = rRdms.getMayBeCompleted();
+            RegistrationService.countCheckedRegistrations(registrationRDMSMap.get(reg.codeRDMS), reg);
           });
           return Array.from(registrationRDMSMap.values());
         }
       ),
-      map(data => data.sort((a, b) => {
-        let result: number = b.toMakeUnchecked - a.toMakeUnchecked;
-        if (result === 0 || a.isCompleted || b.isCompleted) {
-          result = b.toMake - a.toMake;
-        }
-        if (a.allCount === 0 || b.allCount === 0) {
-          result = a.allCount - b.allCount;
-          if (result === 0) {
-            result = b.toMake - a.toMake;
-          }
-        }
-        return result;
-      })),
+      map(data => data.sort(this.compareRegistrations())),
     );
     return this.registrationsRDMS$;
   }
 
   getRegistrationsMSISDN(): Observable<RegistrationMsisdn[]> {
-    this.registrationsMSISDN = this.getRegistrationsList().pipe(
+    this.registrationsMSISDN$ = this.getRegistrationsList().pipe(
       map(
         data => {
           const registrationMSISDNMap = new Map<number, RegistrationMsisdn>();
           data.map(reg => {
-            let rMsisdn = new RegistrationMsisdn();
+            const rMsisdn = new RegistrationMsisdn();
             if (!registrationMSISDNMap.has(reg.codeMSISDN)) {
               rMsisdn.namePPD = reg.namePPD;
               rMsisdn.codeRDMS = reg.codeRDMS;
@@ -208,37 +236,30 @@ export class RegistrationService {
               rMsisdn.nameSeller = reg.nameSeller;
               registrationMSISDNMap.set(reg.codeMSISDN, rMsisdn);
             }
-            rMsisdn = registrationMSISDNMap.get(reg.codeMSISDN);
-            rMsisdn.allCount++;
-            if (reg.checkDud === 'Ок') {
-              rMsisdn.checkedDudCount++;
-            }
-            if (reg.checkDud === 'Не отправлено' && (reg.rejectReason === 'Успешно' || reg.rejectReason === 'В работе')) {
-              rMsisdn.onCheckingCount++;
-            }
-            rMsisdn.toMake = rMsisdn.getToMake();
-            rMsisdn.toMakeUnchecked = rMsisdn.getToMakeUnchecked();
-            rMsisdn.isCompleted = rMsisdn.getIsCompleted();
-            rMsisdn.mayBeCompleted = rMsisdn.getMayBeCompleted();
+            RegistrationService.countCheckedRegistrations(registrationMSISDNMap.get(reg.codeMSISDN), reg);
           });
           return Array.from(registrationMSISDNMap.values());
         }
       ),
-      map(data => data.sort((a, b) => {
-        let result: number = b.toMakeUnchecked - a.toMakeUnchecked;
-        if (result === 0 || a.isCompleted || b.isCompleted) {
+      map(data => data.sort(this.compareRegistrations())),
+    );
+    return this.registrationsMSISDN$;
+  }
+
+  private compareRegistrations() {
+    return (a, b) => {
+      let result: number = b.toMakeUnchecked - a.toMakeUnchecked;
+      if (result === 0 || a.isCompleted || b.isCompleted) {
+        result = b.toMake - a.toMake;
+      }
+      if (a.allCount === 0 || b.allCount === 0) {
+        result = a.allCount - b.allCount;
+        if (result === 0) {
           result = b.toMake - a.toMake;
         }
-        if (a.allCount === 0 || b.allCount === 0) {
-          result = a.allCount - b.allCount;
-          if (result === 0) {
-            result = b.toMake - a.toMake;
-          }
-        }
-        return result;
-      })),
-    );
-    return this.registrationsMSISDN;
+      }
+      return result;
+    };
   }
 }
 
