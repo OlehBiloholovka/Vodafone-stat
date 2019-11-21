@@ -6,35 +6,67 @@ import {RegistrationRdmsComponent} from './registrations/registration-rdms/regis
 import {RegistrationMsisdnComponent} from './registrations/registration-msisdn/registration-msisdn.component';
 import {RegistrationPlanComponent} from './registrations/registration-plan/registration-plan.component';
 import {BaseOutletsComponent} from './base/base-outlets/base-outlets.component';
+import {LoginComponent} from './admin/login/login.component';
+import {RegistrationsComponent} from './registrations/registrations.component';
+import {RegistrationPprComponent} from './registrations/registration-ppr/registration-ppr.component';
+import {RegistrationPartnerComponent} from './registrations/registration-partner/registration-partner.component';
+import {SettingsPprComponent} from './admin/settings/settings-ppr/settings-ppr.component';
 
 const routes: Routes = [
   {
-    path: 'detailed',
-    component: DetailedComponent,
+    path: 'regs',
+    component: RegistrationsComponent,
+    children: [
+      {
+        path: 'ppr',
+        component: RegistrationPprComponent,
+      },
+      {
+        path: 'partner',
+        component: RegistrationPartnerComponent,
+      },
+      {
+        path: 'rdms',
+        component: RegistrationRdmsComponent,
+      },
+      {
+        path: 'detailed',
+        component: DetailedComponent,
+      },
+      {
+        path: 'registrations',
+        component: RegistrationsListComponent,
+      },
+      {
+        path: 'registrations/:id',
+        component: RegistrationsListComponent,
+      },
+      {
+        path: 'msisdn',
+        component: RegistrationMsisdnComponent,
+      },
+      {
+        path: 'plan',
+        component: RegistrationPlanComponent,
+      },
+      {
+        path: 'outlets',
+        component: BaseOutletsComponent,
+      },
+      {
+        path: '',
+        redirectTo: 'rdms',
+        pathMatch: 'full'
+      }
+    ],
   },
   {
-    path: 'registrations',
-    component: RegistrationsListComponent,
+    path: 'settings-ppr',
+    component: SettingsPprComponent,
   },
   {
-    path: 'registrations/:id',
-    component: RegistrationsListComponent,
-  },
-  {
-    path: 'rdms',
-    component: RegistrationRdmsComponent,
-  },
-  {
-    path: 'msisdn',
-    component: RegistrationMsisdnComponent,
-  },
-  {
-    path: 'plan',
-    component: RegistrationPlanComponent,
-  },
-  {
-    path: 'outlets',
-    component: BaseOutletsComponent,
+    path: 'login',
+    component: LoginComponent,
   },
 ];
 

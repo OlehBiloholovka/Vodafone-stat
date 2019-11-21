@@ -1,6 +1,6 @@
-import {Registration} from './registration';
+import {RDMS} from './RDMS';
 
-export class RegistrationRdms extends Registration {
+export class RegistrationRDMS extends RDMS {
   allCount: number;
   onCheckingCount: number;
   checkedDudCount: number;
@@ -9,6 +9,7 @@ export class RegistrationRdms extends Registration {
   toMakeUnchecked: number;
   isCompleted: boolean;
   mayBeCompleted: boolean;
+  isInPPR: boolean;
 
   constructor() {
     super();
@@ -36,5 +37,9 @@ export class RegistrationRdms extends Registration {
 
   public getMayBeCompleted(): boolean {
     return this.getToMakeUnchecked() <= 0;
+  }
+
+  create(): RegistrationRDMS {
+    return new RegistrationRDMS();
   }
 }

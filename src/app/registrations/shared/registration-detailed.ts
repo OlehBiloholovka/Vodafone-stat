@@ -1,6 +1,6 @@
-import {Registration} from './registration';
+import {RDMS} from './RDMS';
 
-export class RegistrationDetailed extends Registration {
+export class RegistrationDetailed extends RDMS {
   $key: number;
   activationDate: string;
   category: string;

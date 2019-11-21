@@ -1,7 +1,7 @@
-import { Registration } from './registration';
+import { RDMS } from './RDMS';
 
 describe('Registration', () => {
   it('should create an instance', () => {
-    expect(new Registration()).toBeTruthy();
+    expect(new RDMS()).toBeTruthy();
   });
 });

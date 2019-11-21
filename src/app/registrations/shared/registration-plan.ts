@@ -1,6 +1,6 @@
-import {RegistrationMsisdn} from './registration-msisdn';
+import {RegistrationMSISDN} from './registration-msisdn';
 
-export class RegistrationPlan extends RegistrationMsisdn {
+export class RegistrationPlan extends RegistrationMSISDN {
   prize: string;
 
   constructor() {

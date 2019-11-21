@@ -1,0 +1,34 @@
+<label>
+  <select [(ngModel)]="dateFilterValue$" [selectedIndex]="0">
+    <option [value]="''">--Select--</option>
+    <option *ngFor="let el of datesList$ | async"
+            [value]="el | date: 'MM_yyyy'">
+      {{el | date: 'MM/yyyy'}}
+    </option>
+  </select>
+</label>
+<div *ngIf="dateFilterValue$">
+  <label>
+    <input type="text" [(ngModel)]="inputFilterValue$" placeholder="Filter ...">
+  </label>
+  <label>
+    <select [(ngModel)]="namePPDFilterValue$">
+      <option [value]="''">--Select--</option>
+      <option *ngFor="let namePPD of namePPDList$ | async" [value]="namePPD">{{namePPD}}</option>
+    </select>
+  </label>
+  <label>
+    <select [(ngModel)]="typeRDMSFilterValue$"
+            [selectedIndex]="0">
+      <option *ngFor="let typeRDMS of typeRDMSList" [value]="typeRDMS.value">{{typeRDMS.value_text}}</option>
+    </select>
+  </label>
+  <label>
+    <select *ngIf="showPlanFilter$ | async"
+            [(ngModel)]="planFilterValue$"
+            [multiple]="true">
+      <option *ngFor="let el of registrationsFilterList" [value]="el['item_id']">{{el['item_text']}}</option>
+    </select>
+  </label>
+</div>
+<router-outlet></router-outlet>

@@ -1,9 +1,6 @@
 import {RegistrationRDMS} from './registration-rdms';
 
-export class RegistrationMSISDN extends RegistrationRDMS {
-  nameSeller: string;
-  codeMSISDN: number;
-
+export class RegistrationPartner extends RegistrationRDMS {
   constructor() {
     super();
     this.plan = 3;

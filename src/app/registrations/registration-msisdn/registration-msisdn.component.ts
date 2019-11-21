@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {Observable} from 'rxjs';
-import {RegistrationMsisdn} from '../shared/registration-msisdn';
+import {RegistrationMSISDN} from '../shared/registration-msisdn';
 import {RegistrationService} from '../shared/registration.service';
-import {RegistrationRdms} from '../shared/registration-rdms';
-import {FormControl} from '@angular/forms';
+import {RegistrationRDMS} from '../shared/registration-rdms';
 import {Router} from '@angular/router';
 
 @Component({
@@ -13,9 +12,9 @@ import {Router} from '@angular/router';
 })
 export class RegistrationMsisdnComponent implements OnInit {
 
-  private registrationsMSISDN$: Observable<RegistrationMsisdn[]>;
+  private registrationsMSISDN$: Observable<RegistrationMSISDN[]>;
+  public filteredRegistrationsMSISDN$: Observable<RegistrationMSISDN[]>;
 
-  public filteredRegistrationsMSISDN$: Observable<RegistrationMsisdn[]>;
   aAllPlanCount$: Observable<number>;
   bAllPlanCount$: Observable<number>;
   aCompletedPlanCount$: Observable<number>;
@@ -23,29 +22,22 @@ export class RegistrationMsisdnComponent implements OnInit {
   aMayCompletedPlanCount$: Observable<number>;
   bMayCompletedPlanCount$: Observable<number>;
 
-  protected inputFilterValue: FormControl = new FormControl('');
-  protected namePPDFilterValue: FormControl = new FormControl('');
-  protected typeRDMSFilterValue: FormControl = new FormControl('');
-  protected registrationsFilterValue: FormControl = new FormControl('');
-  protected namePPDList$: Observable<RegistrationRdms[]>;
-  protected dropdownList: any[];
-
   constructor(private rs: RegistrationService, private router: Router) { }
 
   ngOnInit() {
-    this.rs.getRegistrationFilter(this);
-    this.registrationsMSISDN$ = this.rs.getRegistrationsMSISDN();
+    this.rs.showPlanFilter$ = true;
+    this.registrationsMSISDN$ = this.rs.registrationsMSISDN$;
     this.filteredRegistrationsMSISDN$ = this.rs
-      .getFilteredList(this.registrationsMSISDN$, this.inputFilterValue, this.namePPDFilterValue,
-        this.typeRDMSFilterValue, this.registrationsFilterValue);
-    this.rs.countPlan(this, this.registrationsMSISDN$, this.namePPDFilterValue);
+      .filteredRegistrationsMSISDN$;
+    this.rs.countPlan1(this, this.registrationsMSISDN$);
   }
 
-  private getStyle(rp: RegistrationRdms): {} {
+  private getStyle(rp: RegistrationRDMS): {} {
     return this.rs.getStyle(rp);
   }
 
   toRegistrationsDetailed(codeMSISDN: number) {
-    this.router.navigate(['registrations/', codeMSISDN]).catch(console.log);
+    this.rs.inputFilterValue$.next(codeMSISDN.toString());
+    this.router.navigate(['regs', 'registrations']).catch(console.log);
   }
 }

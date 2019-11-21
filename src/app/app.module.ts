@@ -16,6 +16,13 @@ import { RegistrationMsisdnComponent } from './registrations/registration-msisdn
 import { RegistrationPlanComponent } from './registrations/registration-plan/registration-plan.component';
 import { BaseOutletsComponent } from './base/base-outlets/base-outlets.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { LoginComponent } from './admin/login/login.component';
+import { RegistrationsComponent } from './registrations/registrations.component';
+import { RegistrationPprComponent } from './registrations/registration-ppr/registration-ppr.component';
+import { RegistrationPartnerComponent } from './registrations/registration-partner/registration-partner.component';
+import { SettingsPprComponent } from './admin/settings/settings-ppr/settings-ppr.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatIconModule, MatRadioModule, MatTableModule} from '@angular/material';
 // import {AppRoutingModule} from './app-routing/app-routing.module';
 // import {HttpClientModule} from '@angular/common/http';
 // import {FormsModule} from '@angular/forms';
@@ -39,7 +46,12 @@ const firebaseConfig = {
     RegistrationRdmsComponent,
     RegistrationMsisdnComponent,
     RegistrationPlanComponent,
-    BaseOutletsComponent
+    BaseOutletsComponent,
+    LoginComponent,
+    RegistrationsComponent,
+    RegistrationPprComponent,
+    RegistrationPartnerComponent,
+    SettingsPprComponent,
   ],
   imports: [
     BrowserModule,
@@ -51,6 +63,10 @@ const firebaseConfig = {
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
+    BrowserAnimationsModule,
+    MatRadioModule,
+    MatTableModule,
+    MatIconModule,
     // AppRoutingModule, // routing
     // HttpClientModule, // http client
     // FormsModule, // forms module

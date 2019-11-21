@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
 import {RegistrationService} from '../shared/registration.service';
-import {RegistrationRdms} from '../shared/registration-rdms';
-import {FormControl} from '@angular/forms';
+import {RegistrationRDMS} from '../shared/registration-rdms';
 import {Router} from '@angular/router';
 
 @Component({
@@ -12,9 +11,9 @@ import {Router} from '@angular/router';
 })
 export class RegistrationRdmsComponent implements OnInit {
 
-  private registrationsRdms$: Observable<RegistrationRdms[]>;
+  private registrationsRDMS$: Observable<RegistrationRDMS[]>;
+  public filteredRegistrationsRdms$: Observable<RegistrationRDMS[]>;
 
-  public filteredRegistrationsRdms$: Observable<RegistrationRdms[]>;
   aAllPlanCount$: Observable<number>;
   bAllPlanCount$: Observable<number>;
   aCompletedPlanCount$: Observable<number>;
@@ -22,28 +21,24 @@ export class RegistrationRdmsComponent implements OnInit {
   aMayCompletedPlanCount$: Observable<number>;
   bMayCompletedPlanCount$: Observable<number>;
 
-  protected inputFilterValue: FormControl = new FormControl('');
-  protected namePPDFilterValue: FormControl = new FormControl('');
-  protected typeRDMSFilterValue: FormControl = new FormControl('');
-  protected registrationsFilterValue: FormControl = new FormControl('');
-  protected namePPDList$: Observable<RegistrationRdms[]>;
-  protected dropdownList: any[];
   constructor(private rs: RegistrationService, private router: Router) { }
 
   ngOnInit() {
-    this.rs.getRegistrationFilter(this);
-    this.registrationsRdms$ = this.rs.getRegistrationsRDMS1();
-    this.filteredRegistrationsRdms$ = this.rs
-      .getFilteredList(this.registrationsRdms$, this.inputFilterValue, this.namePPDFilterValue, this.typeRDMSFilterValue
-        , this.registrationsFilterValue);
-    this.rs.countPlan(this, this.registrationsRdms$, this.namePPDFilterValue);
+    this.rs.showPlanFilter$ = true;
+    // this.registrationsRDMS$ = this.rs.getRegistrationsRDMS3();
+    // this.filteredRegistrationsPPR$ = this.rs.filterList(this.registrationsRDMS$);
+    // this.rs.countPlan1(this, this.registrationsRDMS$);
+    this.registrationsRDMS$ = this.rs.registrationsRDMS$;
+    this.filteredRegistrationsRdms$ = this.rs.filteredRegistrationsRDMS$;
+    this.rs.countPlan1(this, this.registrationsRDMS$);
   }
 
-  private getStyle(rp: RegistrationRdms): {} {
+  private getStyle(rp: RegistrationRDMS): {} {
     return  this.rs.getStyle(rp);
   }
 
   toRegistrationsDetailed(codeRDMS: number) {
-    this.router.navigate(['registrations/', codeRDMS]).catch(console.log);
+    this.rs.inputFilterValue$.next(codeRDMS.toString());
+    this.router.navigate(['regs', 'registrations']).catch(console.log);
   }
 }
