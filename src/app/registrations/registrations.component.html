@@ -1,3 +1,16 @@
+<h4>Basic mat-select</h4>
+<mat-form-field>
+  <mat-label>Favorite food</mat-label>
+  <mat-select [(ngModel)]="dateFilterValue$">
+    <mat-option *ngFor="let el of datesList$ | async"
+                [value]="el | date: 'MM_yyyy'">
+      {{el | date: 'MM/yyyy'}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+
+
 <label>
   <select [(ngModel)]="dateFilterValue$" [selectedIndex]="0">
     <option [value]="''">--Select--</option>

@@ -11,6 +11,9 @@ import {RegistrationsComponent} from './registrations/registrations.component';
 import {RegistrationPprComponent} from './registrations/registration-ppr/registration-ppr.component';
 import {RegistrationPartnerComponent} from './registrations/registration-partner/registration-partner.component';
 import {SettingsPprComponent} from './admin/settings/settings-ppr/settings-ppr.component';
+import {DashboardComponent} from './dashboard/dashboard.component';
+import {AddressComponent} from './address/address.component';
+import {TableComponent} from './table/table.component';
 
 const routes: Routes = [
   {
@@ -59,6 +62,18 @@ const routes: Routes = [
         pathMatch: 'full'
       }
     ],
+  },
+  {
+    path: 'dashboard',
+    component: DashboardComponent
+  },
+  {
+    path: 'address',
+    component: AddressComponent
+  },
+  {
+    path: 'table',
+    component: TableComponent
   },
   {
     path: 'settings-ppr',
