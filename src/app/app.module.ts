@@ -22,7 +22,15 @@ import { RegistrationPprComponent } from './registrations/registration-ppr/regis
 import { RegistrationPartnerComponent } from './registrations/registration-partner/registration-partner.component';
 import { SettingsPprComponent } from './admin/settings/settings-ppr/settings-ppr.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatFormFieldModule, MatIconModule, MatRadioModule, MatSelectModule, MatTableModule} from '@angular/material';
+import {
+  MatDialogModule,
+  MatFormFieldModule,
+  MatIconModule,
+  MatProgressSpinnerModule,
+  MatRadioModule,
+  MatSelectModule, MatSnackBarModule,
+  MatTableModule
+} from '@angular/material';
 import { MainNavComponent } from './main-nav/main-nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -38,6 +46,8 @@ import { MatInputModule } from '@angular/material/input';
 import { TableComponent } from './table/table.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
+import {firebase, firebaseui, FirebaseUIModule} from 'firebaseui-angular';
+import { ProgressDialogComponent } from './progress-dialog/progress-dialog.component';
 // import {AppRoutingModule} from './app-routing/app-routing.module';
 // import {HttpClientModule} from '@angular/common/http';
 // import {FormsModule} from '@angular/forms';
@@ -50,6 +60,36 @@ const firebaseConfig = {
   storageBucket: 'vodafone-stat.appspot.com',
   messagingSenderId: '381209386765',
   appId: '1:381209386765:web:fe73e25967a4060b849a44'
+};
+
+const firebaseUiAuthConfig: firebaseui.auth.Config = {
+  signInFlow: 'popup',
+  signInOptions: [
+    firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+    {
+      scopes: [
+        'public_profile',
+        'email',
+        'user_likes',
+        'user_friends'
+      ],
+      customParameters: {
+        auth_type: 'reauthenticate'
+      },
+      provider: firebase.auth.FacebookAuthProvider.PROVIDER_ID
+    },
+    firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+    firebase.auth.GithubAuthProvider.PROVIDER_ID,
+    {
+      requireDisplayName: false,
+      provider: firebase.auth.EmailAuthProvider.PROVIDER_ID
+    },
+    firebase.auth.PhoneAuthProvider.PROVIDER_ID,
+    firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID
+  ],
+  tosUrl: '<your-tos-link>',
+  privacyPolicyUrl: '<your-privacyPolicyUrl-link>',
+  credentialHelper: firebaseui.auth.CredentialHelper.ACCOUNT_CHOOSER_COM
 };
 
 @NgModule({
@@ -71,6 +111,7 @@ const firebaseConfig = {
     DashboardComponent,
     AddressComponent,
     TableComponent,
+    ProgressDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -78,6 +119,7 @@ const firebaseConfig = {
     AngularFireDatabaseModule,
     AngularFirestoreModule, // firestore
     AngularFireAuthModule, // auth
+    FirebaseUIModule.forRoot(firebaseUiAuthConfig),
     AngularFireStorageModule, // storage
     AppRoutingModule,
     FormsModule,
@@ -99,11 +141,15 @@ const firebaseConfig = {
     MatInputModule,
     MatPaginatorModule,
     MatSortModule,
+    MatDialogModule,
+    MatProgressSpinnerModule,
+    MatSnackBarModule
     // AppRoutingModule, // routing
     // HttpClientModule, // http client
     // FormsModule, // forms module
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [ProgressDialogComponent]
 })
 export class AppModule { }

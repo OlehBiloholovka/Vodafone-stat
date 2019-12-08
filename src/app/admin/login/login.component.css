@@ -1,0 +1,30 @@
+.right-margin {
+  margin-right: 10px;
+}
+.centered-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+.centered-raw {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+ }
+.main-div{
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.mb0{
+  margin-bottom: 0;
+}
+.pt0{
+  padding-top: 0;
+}
+.input-text-size{
+  font-size: x-large;
+}

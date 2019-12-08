@@ -1,0 +1,40 @@
+<div class="main-div">
+  <mat-card class="centered-col">
+    <mat-card-header>
+      <mat-card-title>
+        ВХІД
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="mb0">
+      <div id="recaptcha-container" [hidden]="smsSent | async"></div>
+      <div *ngIf="!(smsSent | async)">
+        <label class="right-margin input-text-size">{{countryCode}}</label>
+        <mat-form-field>
+          <label>
+            <input [(ngModel)]="phone" class="input-text-size" matInput maxlength="9" placeholder="Телефон">
+          </label>
+        </mat-form-field>
+      </div>
+      <div *ngIf="smsSent | async">
+        <mat-form-field>
+          <label>
+            <input [(ngModel)]="verificationCode" matInput placeholder="Введіть код з смс">
+          </label>
+        </mat-form-field>
+      </div>
+    </mat-card-content>
+    <mat-card-actions class="centered-raw pt0">
+      <button (click)="sendLoginCode()" *ngIf="!(smsSent | async)" [disabled]="sendSmsButtonDisable | async"
+              mat-button>Відправити SMS
+      </button>
+      <button (click)="verifyLoginCode()" *ngIf="smsSent | async" mat-button>Перевірити</button>
+      <button (click)="off()" *ngIf="isUser() | async" mat-button>Вийти</button>
+    </mat-card-actions>
+  </mat-card>
+</div>
+<div *ngIf="user">
+  You have successfully logged in with your phone number!
+
+  UserId: {{ user?.uid }}
+
+</div>
