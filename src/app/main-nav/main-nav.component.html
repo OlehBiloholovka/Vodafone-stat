@@ -5,12 +5,13 @@
       [opened]="(isHandset$ | async) === false">
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item href="#" [routerLink]="['dashboard']">Dashboard</a>
-      <a mat-list-item href="#" [routerLink]="['address']">Address</a>
-      <a mat-list-item href="#" [routerLink]="['table']">Table</a>
-      <a mat-list-item href="#" [routerLink]="['regs', 'ppr']">ППР</a>
-      <a mat-list-item href="#" [routerLink]="['regs', 'partner']">Партнер </a>
-      <a mat-list-item href="#" [routerLink]="['login']">LOGIN </a>
+      <a mat-list-item href="#" [routerLink]="['/dashboard']">Dashboard</a>
+      <a mat-list-item href="#" [routerLink]="['/address']">Address</a>
+      <a mat-list-item href="#" [routerLink]="['/table']">Table</a>
+      <a mat-list-item href="#" [routerLink]="['/regs', 'ppr']">ППР</a>
+      <a mat-list-item href="#" [routerLink]="['/regs', 'partner']">Партнер </a>
+      <a mat-list-item href="#" [routerLink]="['/login']">LOGIN </a>
+      <a mat-list-item href="#" [routerLink]="['']" (click)="logout()">Вийти</a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>

@@ -1,53 +1,42 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
 
-import { AppComponent } from './app.component';
+import {AppComponent} from './app.component';
 import {AngularFireModule} from '@angular/fire';
 import {AngularFirestoreModule} from '@angular/fire/firestore';
 import {AngularFireAuthModule} from '@angular/fire/auth';
 import {AngularFireStorageModule} from '@angular/fire/storage';
-import { DetailedComponent } from './detailed/detailed.component';
 import {AppRoutingModule} from './app-routing.module';
-import { RegistrationsListComponent } from './registrations/registrations-list/registrations-list.component';
-import { RegistrationDetailComponent } from './registrations/registration-detail/registration-detail.component';
+import {RegistrationDetailComponent} from './registrations/registration-detail/registration-detail.component';
 import {AngularFireDatabaseModule} from '@angular/fire/database';
-import { RegistrationRdmsComponent } from './registrations/registration-rdms/registration-rdms.component';
-import { RegistrationMsisdnComponent } from './registrations/registration-msisdn/registration-msisdn.component';
-import { RegistrationPlanComponent } from './registrations/registration-plan/registration-plan.component';
-import { BaseOutletsComponent } from './base/base-outlets/base-outlets.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { LoginComponent } from './admin/login/login.component';
-import { RegistrationsComponent } from './registrations/registrations.component';
-import { RegistrationPprComponent } from './registrations/registration-ppr/registration-ppr.component';
-import { RegistrationPartnerComponent } from './registrations/registration-partner/registration-partner.component';
-import { SettingsPprComponent } from './admin/settings/settings-ppr/settings-ppr.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
   MatDialogModule,
   MatFormFieldModule,
   MatIconModule,
   MatProgressSpinnerModule,
   MatRadioModule,
-  MatSelectModule, MatSnackBarModule,
+  MatSelectModule,
+  MatSnackBarModule,
   MatTableModule
 } from '@angular/material';
-import { MainNavComponent } from './main-nav/main-nav.component';
-import { LayoutModule } from '@angular/cdk/layout';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatButtonModule } from '@angular/material/button';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatListModule } from '@angular/material/list';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { MatGridListModule } from '@angular/material/grid-list';
-import { MatCardModule } from '@angular/material/card';
-import { MatMenuModule } from '@angular/material/menu';
-import { AddressComponent } from './address/address.component';
-import { MatInputModule } from '@angular/material/input';
-import { TableComponent } from './table/table.component';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatSortModule } from '@angular/material/sort';
+import {LayoutModule} from '@angular/cdk/layout';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatButtonModule} from '@angular/material/button';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatListModule} from '@angular/material/list';
+import {MatGridListModule} from '@angular/material/grid-list';
+import {MatCardModule} from '@angular/material/card';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatInputModule} from '@angular/material/input';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatSortModule} from '@angular/material/sort';
 import {firebase, firebaseui, FirebaseUIModule} from 'firebaseui-angular';
-import { ProgressDialogComponent } from './progress-dialog/progress-dialog.component';
+import {ProgressDialogComponent} from './progress-dialog/progress-dialog.component';
+import {AuthenticationModule} from './authentication/authentication.module';
+import {AngularFireAuthGuardModule} from '@angular/fire/auth-guard';
+import {MainNavModule} from './main-nav/main-nav.module';
 // import {AppRoutingModule} from './app-routing/app-routing.module';
 // import {HttpClientModule} from '@angular/common/http';
 // import {FormsModule} from '@angular/forms';
@@ -95,22 +84,22 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
 @NgModule({
   declarations: [
     AppComponent,
-    DetailedComponent,
-    RegistrationsListComponent,
+    // DetailedComponent,
+    // RegistrationsListComponent,
     RegistrationDetailComponent,
-    RegistrationRdmsComponent,
-    RegistrationMsisdnComponent,
-    RegistrationPlanComponent,
-    BaseOutletsComponent,
-    LoginComponent,
-    RegistrationsComponent,
-    RegistrationPprComponent,
-    RegistrationPartnerComponent,
-    SettingsPprComponent,
-    MainNavComponent,
-    DashboardComponent,
-    AddressComponent,
-    TableComponent,
+    // RegistrationRdmsComponent,
+    // RegistrationMsisdnComponent,
+    // RegistrationPlanComponent,
+    // BaseOutletsComponent,
+    // LoginComponent,
+    // RegistrationsComponent,
+    // RegistrationPprComponent,
+    // RegistrationPartnerComponent,
+    // SettingsPprComponent,
+    // MainNavComponent,
+    // DashboardComponent,
+    // AddressComponent,
+    // TableComponent,
     ProgressDialogComponent,
   ],
   imports: [
@@ -143,7 +132,11 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     MatSortModule,
     MatDialogModule,
     MatProgressSpinnerModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    AuthenticationModule,
+    AngularFireAuthGuardModule,
+    MainNavModule
+    // routing,
     // AppRoutingModule, // routing
     // HttpClientModule, // http client
     // FormsModule, // forms module

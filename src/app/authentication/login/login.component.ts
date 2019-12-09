@@ -4,9 +4,10 @@ import {AngularFireAuth} from '@angular/fire/auth';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {map} from 'rxjs/operators';
 import {BehaviorSubject, Observable} from 'rxjs';
-import {WindowService} from '../shared/window.service';
+import {WindowService} from '../../admin/shared/window.service';
 import {User} from 'firebase';
 import {MatDialog, MatSnackBar} from '@angular/material';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -30,7 +31,8 @@ export class LoginComponent implements OnInit {
               private ws: WindowService,
               public dialog: MatDialog,
               // tslint:disable-next-line:variable-name
-              private _snackBar: MatSnackBar) {
+              private _snackBar: MatSnackBar,
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -83,6 +85,7 @@ export class LoginComponent implements OnInit {
         this.user = result.user;
 
       })
+      .then(() => this.router.navigate(['']))
       .catch(error => console.log(error, 'Incorrect code entered?'));
   }
 
@@ -91,7 +94,7 @@ export class LoginComponent implements OnInit {
   }
 
   checkPhone(): Observable<boolean> {
-    return  this.db
+    return this.db
       .collection('phones', ref => ref.where('phone', '==', Number.parseInt(this.phone, 10)))
       .get()
       .pipe(map(data => !data.empty));
@@ -102,7 +105,7 @@ export class LoginComponent implements OnInit {
   }
 
   onIncorrectPhone() {
-    this._snackBar.open('Номер не вірний', 'OK');
+    this._snackBar.open('Номер невірний', 'OK');
   }
 }
 
