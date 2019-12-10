@@ -24,17 +24,17 @@
       </div>
     </mat-card-content>
     <mat-card-actions class="centered-raw pt0">
-      <button (click)="sendLoginCode()" *ngIf="!(smsSent | async)" [disabled]="sendSmsButtonDisable | async"
+      <button (click)="login()" *ngIf="!(smsSent | async)" [disabled]="sendSmsButtonDisable | async"
               mat-button>Відправити SMS
       </button>
       <button (click)="verifyLoginCode()" *ngIf="smsSent | async" mat-button>Перевірити</button>
-      <button (click)="off()" *ngIf="isUser() | async" mat-button>Вийти</button>
+      <button (click)="logout()" *ngIf="isUser() | async" mat-button>Вийти</button>
     </mat-card-actions>
   </mat-card>
 </div>
-<div *ngIf="user">
+<div *ngIf="isUser() | async">
   You have successfully logged in with your phone number!
 
-  UserId: {{ user?.uid }}
+  UserId: {{ (isUser() | async)?.uid }}
 
 </div>
