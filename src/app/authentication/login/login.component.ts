@@ -8,6 +8,7 @@ import {WindowService} from '../../admin/shared/window.service';
 import {User} from 'firebase';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {Router} from '@angular/router';
+import {AuthenticationService} from '../shared/authentication.service';
 
 @Component({
   selector: 'app-login',
@@ -29,6 +30,7 @@ export class LoginComponent implements OnInit {
   constructor(private afAuth: AngularFireAuth,
               private db: AngularFirestore,
               private ws: WindowService,
+              private as: AuthenticationService,
               public dialog: MatDialog,
               // tslint:disable-next-line:variable-name
               private _snackBar: MatSnackBar,

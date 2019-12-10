@@ -135,7 +135,7 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     MatSnackBarModule,
     AuthenticationModule,
     AngularFireAuthGuardModule,
-    MainNavModule
+    MainNavModule,
     // routing,
     // AppRoutingModule, // routing
     // HttpClientModule, // http client
