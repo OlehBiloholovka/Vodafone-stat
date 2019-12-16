@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
 import {RegistrationService} from '../shared/registration.service';
 import {RegistrationPlan} from '../shared/registration-plan';
@@ -21,7 +21,8 @@ export class RegistrationPlanComponent implements OnInit {
   aMayCompletedPlanCount$: Observable<number>;
   bMayCompletedPlanCount$: Observable<number>;
 
-  constructor(private rs: RegistrationService, private router: Router) { }
+  constructor(private rs: RegistrationService, private router: Router) {
+  }
 
   ngOnInit() {
     this.rs.showPlanFilter$ = true;
@@ -33,7 +34,7 @@ export class RegistrationPlanComponent implements OnInit {
     this.rs.countPlan1(this, this.registrationsPlan$);
   }
 
-  private getStyle(rp: RegistrationRDMS): {} {
+  getStyle(rp: RegistrationRDMS): {} {
     return this.rs.getStyle(rp);
   }
 
