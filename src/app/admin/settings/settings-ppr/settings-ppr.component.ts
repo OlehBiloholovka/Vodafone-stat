@@ -12,19 +12,22 @@ export class SettingsPprComponent implements OnInit {
   get dateFilterValue$(): string {
     return this._dateFilterValue$.getValue();
   }
+
   set dateFilterValue$(value: string) {
     this._dateFilterValue$.next(value);
   }
-  protected datesList$: Observable<Date[]>;
+
+  datesList$: Observable<Date[]>;
   // tslint:disable-next-line:variable-name
   private _dateFilterValue$: BehaviorSubject<string> = this.rs.dateFilterValue$;
 
-  private outletsPPR$: Observable<Outlet[]>;
-  statusPPR: {text: string, value: number}[] = [{text: 'ППР', value: 5},
+  outletsPPR$: Observable<Outlet[]>;
+  statusPPR: { text: string, value: number }[] = [{text: 'ППР', value: 5},
     {text: '50%', value: 10},
     {text: '100%', value: 20}];
 
-  constructor(private rs: RegistrationService) { }
+  constructor(private rs: RegistrationService) {
+  }
 
   ngOnInit() {
     this.datesList$ = this.rs.getDatesList();
@@ -34,7 +37,7 @@ export class SettingsPprComponent implements OnInit {
     this.outletsPPR$ = this.rs.outletsPPR$;
   }
 
-  updatePPR(outlet: Outlet ): void {
+  updatePPR(outlet: Outlet): void {
     this.rs.updatePPR(outlet.codeRDMS, outlet.typePPR);
   }
 }

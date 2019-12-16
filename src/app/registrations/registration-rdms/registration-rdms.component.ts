@@ -21,7 +21,8 @@ export class RegistrationRdmsComponent implements OnInit {
   aMayCompletedPlanCount$: Observable<number>;
   bMayCompletedPlanCount$: Observable<number>;
 
-  constructor(private rs: RegistrationService, private router: Router) { }
+  constructor(private rs: RegistrationService, private router: Router) {
+  }
 
   ngOnInit() {
     this.rs.showPlanFilter$ = true;
@@ -33,8 +34,8 @@ export class RegistrationRdmsComponent implements OnInit {
     this.rs.countPlan1(this, this.registrationsRDMS$);
   }
 
-  private getStyle(rp: RegistrationRDMS): {} {
-    return  this.rs.getStyle(rp);
+  getStyle(rp: RegistrationRDMS): {} {
+    return this.rs.getStyle(rp);
   }
 
   toRegistrationsDetailed(codeRDMS: number) {
