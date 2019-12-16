@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
 import {RegistrationService} from '../shared/registration.service';
-import {RegistrationRdms} from '../shared/registration-rdms';
+import {RegistrationRDMS} from '../shared/registration-rdms';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-registration-rdms',
@@ -10,12 +11,34 @@ import {RegistrationRdms} from '../shared/registration-rdms';
 })
 export class RegistrationRdmsComponent implements OnInit {
 
-  public registrationsRdms: Observable<RegistrationRdms[]>;
+  private registrationsRDMS$: Observable<RegistrationRDMS[]>;
+  public filteredRegistrationsRdms$: Observable<RegistrationRDMS[]>;
 
-  constructor(private rs: RegistrationService) { }
+  aAllPlanCount$: Observable<number>;
+  bAllPlanCount$: Observable<number>;
+  aCompletedPlanCount$: Observable<number>;
+  bCompletedPlanCount$: Observable<number>;
+  aMayCompletedPlanCount$: Observable<number>;
+  bMayCompletedPlanCount$: Observable<number>;
+
+  constructor(private rs: RegistrationService, private router: Router) { }
 
   ngOnInit() {
-    this.registrationsRdms = this.rs.getRegistrationsRDMS();
+    this.rs.showPlanFilter$ = true;
+    // this.registrationsRDMS$ = this.rs.getRegistrationsRDMS3();
+    // this.filteredRegistrationsPPR$ = this.rs.filterList(this.registrationsRDMS$);
+    // this.rs.countPlan1(this, this.registrationsRDMS$);
+    this.registrationsRDMS$ = this.rs.registrationsRDMS$;
+    this.filteredRegistrationsRdms$ = this.rs.filteredRegistrationsRDMS$;
+    this.rs.countPlan1(this, this.registrationsRDMS$);
   }
 
+  private getStyle(rp: RegistrationRDMS): {} {
+    return  this.rs.getStyle(rp);
+  }
+
+  toRegistrationsDetailed(codeRDMS: number) {
+    this.rs.inputFilterValue$.next(codeRDMS.toString());
+    this.router.navigate(['regs', 'registrations']).catch(console.log);
+  }
 }

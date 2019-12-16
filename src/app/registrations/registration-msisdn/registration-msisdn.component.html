@@ -1,4 +1,20 @@
 <h1>MSISDN</h1>
+<br>
+<p>
+  Усіх партнерів категорії А: {{aAllPlanCount$ | async}}
+  <span>Виконало план кат. А: {{aCompletedPlanCount$ | async}} </span>
+  <span>Без перевірки ДУД кат. А: {{aMayCompletedPlanCount$ | async}}</span>
+  <span> {{(aCompletedPlanCount$ | async)/(aAllPlanCount$ | async) | percent}}</span>
+  <span>({{(aMayCompletedPlanCount$ | async)/(aAllPlanCount$ | async) | percent}})</span>
+</p>
+<p>
+  Усіх партнерів категорії B: {{bAllPlanCount$ | async}}
+  <span>Виконало план кат. B: {{bCompletedPlanCount$ | async}} </span>
+  <span>Без перевірки ДУД кат. B: {{bMayCompletedPlanCount$ | async}}</span>
+  <span> {{(bCompletedPlanCount$ | async)/(bAllPlanCount$ | async) | percent}}</span>
+  <span>({{(bMayCompletedPlanCount$ | async)/(bAllPlanCount$ | async) | percent}})</span>
+</p>
+<p>Кількість: {{(filteredRegistrationsMSISDN$ | async)?.length}}</p>
 
 <table>
   <thead>
@@ -7,7 +23,7 @@
   </tr>
   </thead>
   <tbody>
-  <tr *ngFor="let reg of registrationsMSISDN | async">
+  <tr *ngFor="let reg of filteredRegistrationsMSISDN$ | async" [ngStyle]=getStyle(reg) (click)="toRegistrationsDetailed(reg.codeMSISDN)">
     <td>{{reg.codeMSISDN}}</td>
     <td>{{reg.nameSeller}}</td>
     <td>{{reg.codeRDMS}}</td>
@@ -18,5 +34,8 @@
     <td>{{reg.allCount}}</td>
     <td>{{reg.onCheckingCount}}</td>
     <td>{{reg.checkedDudCount}}</td>
+    <td>{{reg.plan}}</td>
+    <td>{{reg.toMake}}</td>
+    <td>{{reg.toMakeUnchecked}}</td>
   </tr>
 </table>

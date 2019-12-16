@@ -1,21 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
 import {RegistrationService} from '../shared/registration.service';
-import {Registration} from '../shared/registration';
+import {RegistrationDetailed} from '../shared/registration-detailed';
 
 @Component({
   selector: 'app-registrations-list',
   templateUrl: './registrations-list.component.html',
   styleUrls: ['./registrations-list.component.css']
 })
-export class RegistrationsListComponent implements OnInit {
+export class RegistrationsListComponent implements OnInit, OnDestroy {
+  public filteredRegistrations$: Observable<RegistrationDetailed[]>;
 
-  public registrations: Observable<Registration[]>;
-
-  constructor(private rs: RegistrationService) { }
-
-  ngOnInit() {
-    this.registrations = this.rs.getRegistrationsList();
+  constructor(private rs: RegistrationService) {
   }
 
+  ngOnInit() {
+    this.rs.showPlanFilter$ = false;
+    this.filteredRegistrations$ = this.rs.filteredRegistrationsDetailed$;
+  }
+
+  ngOnDestroy(): void {
+    this.rs.inputFilterValue$.next('');
+  }
 }

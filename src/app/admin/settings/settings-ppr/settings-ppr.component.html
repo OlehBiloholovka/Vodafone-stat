@@ -1,0 +1,39 @@
+<p>SETTINGS PPR</p>
+<label>
+  <select [(ngModel)]="dateFilterValue$" [selectedIndex]="0">
+    <option [value]="''">--Select--</option>
+    <option *ngFor="let el of datesList$ | async"
+            [value]="el | date: 'MM_yyyy'">
+      {{el | date: 'MM/yyyy'}}
+    </option>
+  </select>
+</label>
+<table class="mat-table">
+  <thead>
+  <tr>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class="mat-row" *ngFor="let reg of outletsPPR$ | async">
+    <td class="mat-cell">{{reg.codeRDMS}}</td>
+    <td class="mat-cell">{{reg.nameRDMS}}</td>
+    <td class="mat-cell">{{reg.addressRDMS}}</td>
+    <td class="mat-cell">{{reg.typeRDMS}}</td>
+    <td class="mat-cell">{{reg.namePPD}}</td>
+    <td class="mat-cell">
+      <mat-radio-group [(ngModel)]="reg.typePPR" (change)="updatePPR(reg)">
+        <mat-radio-button *ngFor="let status of statusPPR"
+                          [checked]="reg.typePPR.valueOf() === status.value"
+                          [value]="status.value">
+          {{status.text}} {{reg.typePPR}}
+        </mat-radio-button>
+<!--        <mat-radio-button *ngFor="let status of statusPPR; let i = index"-->
+<!--                          [checked]="i === 0"-->
+<!--                          [value]="status.value">-->
+<!--          {{status.text}}-->
+<!--        </mat-radio-button>-->
+      </mat-radio-group>
+    </td>
+  </tr>
+</table>

@@ -1,46 +1,98 @@
-import { NgModule } from '@angular/core';
+import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {DetailedComponent} from './detailed/detailed.component';
-import {RegistrationsListComponent} from './registrations/registrations-list/registrations-list.component';
-import {RegistrationRdmsComponent} from './registrations/registration-rdms/registration-rdms.component';
-import {RegistrationMsisdnComponent} from './registrations/registration-msisdn/registration-msisdn.component';
-import {RegistrationPlanComponent} from './registrations/registration-plan/registration-plan.component';
-import {BaseOutletsComponent} from './base/base-outlets/base-outlets.component';
+import {canActivate, redirectLoggedInTo, redirectUnauthorizedTo} from '@angular/fire/auth-guard';
+// import {MainNavComponent} from './main-nav/main-nav.component';
 
-const routes: Routes = [
+export const routes: Routes = [
+  // {
+  //   path: 'regs',
+  //   component: RegistrationsComponent,
+  //   ...canActivate(redirectUnauthorizedTo(['login-new'])),
+  //   children: [
+  //     {
+  //       path: 'ppr',
+  //       component: RegistrationPprComponent,
+  //     },
+  //     {
+  //       path: 'partner',
+  //       component: RegistrationPartnerComponent,
+  //     },
+  //     {
+  //       path: 'rdms',
+  //       component: RegistrationRdmsComponent,
+  //     },
+  //     {
+  //       path: 'detailed',
+  //       component: DetailedComponent,
+  //     },
+  //     {
+  //       path: 'registrations',
+  //       component: RegistrationsListComponent,
+  //     },
+  //     {
+  //       path: 'registrations/:id',
+  //       component: RegistrationsListComponent,
+  //     },
+  //     {
+  //       path: 'msisdn',
+  //       component: RegistrationMsisdnComponent,
+  //     },
+  //     {
+  //       path: 'plan',
+  //       component: RegistrationPlanComponent,
+  //     },
+  //     {
+  //       path: 'outlets',
+  //       component: BaseOutletsComponent,
+  //     },
+  //     {
+  //       path: '',
+  //       redirectTo: 'rdms',
+  //       pathMatch: 'full'
+  //     }
+  //   ],
+  // },
+  // {
+  //   path: 'dashboard',
+  //   component: DashboardComponent
+  // },
+  // {
+  //   path: 'address',
+  //   component: AddressComponent
+  // },
+  // {
+  //   path: 'table',
+  //   component: TableComponent
+  // },
+  // {
+  //   path: 'settings-ppr',
+  //   component: SettingsPprComponent,
+  // },
   {
-    path: 'detailed',
-    component: DetailedComponent,
+    path: 'login',
+    ...canActivate(redirectLoggedInTo([''])),
+    runGuardsAndResolvers: 'always',
+    loadChildren: './authentication/authentication.module#AuthenticationModule'
   },
   {
-    path: 'registrations',
-    component: RegistrationsListComponent,
-  },
-  {
-    path: 'rdms',
-    component: RegistrationRdmsComponent,
-  },
-  {
-    path: 'msisdn',
-    component: RegistrationMsisdnComponent,
-  },
-  {
-    path: 'plan',
-    component: RegistrationPlanComponent,
-  },
-  {
-    path: 'outlets',
-    component: BaseOutletsComponent,
+    path: '',
+    loadChildren: './main-nav/main-nav.module#MainNavModule',
+    ...canActivate(redirectUnauthorizedTo(['login'])),
+    runGuardsAndResolvers: 'always',
+    // component: MainNavComponent,
   },
 ];
+
+// export const routing: ModuleWithProviders = RouterModule.forRoot(routes);
 
 @NgModule({
   declarations: [],
   imports: [
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes, {onSameUrlNavigation: 'reload'})
   ],
   exports: [
     RouterModule
   ]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}

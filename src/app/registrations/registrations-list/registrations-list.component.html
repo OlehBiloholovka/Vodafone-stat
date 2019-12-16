@@ -1,5 +1,5 @@
 <h1>Registrations</h1>
-
+<p>Кількість: {{(filteredRegistrations$ | async)?.length}}</p>
 <table>
   <thead>
   <tr>
@@ -7,7 +7,7 @@
   </tr>
   </thead>
   <tbody>
-  <tr *ngFor="let reg of registrations | async">
+  <tr *ngFor="let reg of filteredRegistrations$ | async">
     <td>{{reg.$key}}</td>
     <td>{{reg.codeRDMS}}</td>
     <td>{{reg.nameRDMS}}</td>
@@ -23,7 +23,7 @@
     <td>{{reg.activationDate | date: "dd/MM/yyyy hh:mm"}}</td>
     <td>{{reg.tariffId}}</td>
     <td>{{reg.refill}}</td>
-    <td>{{reg.rechargeDate}}</td>
+    <td>{{reg.registrationDate | date: "dd/MM/yyyy hh:mm"}}</td>
     <td>{{reg.rejectReason}}</td>
     <td>{{reg.checkDud}}</td>
   </tr>

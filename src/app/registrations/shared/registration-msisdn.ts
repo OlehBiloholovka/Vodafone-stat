@@ -1,12 +1,11 @@
-export class RegistrationMsisdn {
-  addressRDMS: string;
+import {RegistrationRDMS} from './registration-rdms';
+
+export class RegistrationMSISDN extends RegistrationRDMS {
   nameSeller: string;
-  codeRDMS: number;
-  nameRDMS: string;
-  namePPD: string;
-  typeRDMS: string;
   codeMSISDN: number;
-  allCount = 0;
-  onCheckingCount = 0;
-  checkedDudCount = 0;
+
+  constructor() {
+    super();
+    this.plan = 3;
+  }
 }

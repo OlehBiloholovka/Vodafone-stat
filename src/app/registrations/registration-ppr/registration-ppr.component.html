@@ -1,0 +1,59 @@
+<h1>PPR</h1>
+<br>
+<p>
+  Усіх ТТ категорії А: {{aAllPlanCount$ | async}}
+  <span>Виконало план кат. А: {{aCompletedPlanCount$ | async}} </span>
+  <span>Без перевірки ДУД кат. А: {{aMayCompletedPlanCount$ | async}}</span>
+  <span> {{(aCompletedPlanCount$ | async)/(aAllPlanCount$ | async) | percent}}</span>
+  <span>({{(aMayCompletedPlanCount$ | async)/(aAllPlanCount$ | async) | percent}})</span>
+</p>
+<p>
+  Усіх ТТ категорії B: {{bAllPlanCount$ | async}}
+  <span>Виконало план кат. B: {{bCompletedPlanCount$ | async}} </span>
+  <span>Без перевірки ДУД кат. B: {{bMayCompletedPlanCount$ | async}}</span>
+  <span> {{(bCompletedPlanCount$ | async)/(bAllPlanCount$ | async) | percent}}</span>
+  <span>({{(bMayCompletedPlanCount$ | async)/(bAllPlanCount$ | async) | percent}})</span>
+</p>
+<p>Кількість: {{(filteredRegistrationsPPR$ | async)?.length}}</p>
+<mat-icon aria-hidden="false" aria-label="Example home icon">send</mat-icon><span> - Всього реєстрацій</span><br>
+<mat-icon aria-hidden="false" aria-label="Example home icon">hourglass_empty</mat-icon><span> - На перевірці ДУД</span><br>
+<mat-icon aria-hidden="false" aria-label="Example home icon">check_circle</mat-icon><span> - Перевірено ДУД</span><br>
+<mat-icon aria-hidden="false" aria-label="Example home icon">assignment</mat-icon><span> - План</span><br>
+<mat-icon aria-hidden="false" aria-label="Example home icon">next_week</mat-icon><span> - Залишилось (Без перевірки ДУД)</span><br>
+<mat-icon aria-hidden="false" aria-label="Example home icon">assignment_turned_in</mat-icon><span> - Торгова точка в ППР</span><br>
+
+<table>
+  <thead>
+  <tr>
+    <th>RDMS</th>
+    <th>Назва</th>
+    <th>Адреса</th>
+    <th>Тип</th>
+    <th>ППД</th>
+    <th><mat-icon aria-hidden="false" aria-label="Example home icon">send</mat-icon></th>
+    <th><mat-icon aria-hidden="false" aria-label="Example home icon">hourglass_empty</mat-icon></th>
+    <th><mat-icon aria-hidden="false" aria-label="Example home icon">check_circle</mat-icon></th>
+    <th><mat-icon aria-hidden="false" aria-label="Example home icon">assignment</mat-icon></th>
+    <th><mat-icon aria-hidden="false" aria-label="Example home icon">next_week</mat-icon></th>
+    <th><mat-icon aria-hidden="false" aria-label="Example home icon">assignment_turned_in</mat-icon></th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let reg of filteredRegistrationsPPR$ | async" [ngStyle]=getStyle(reg)>
+    <td>{{reg.codeRDMS}}</td>
+    <td>{{reg.nameRDMS}}</td>
+    <td>{{reg.addressRDMS}}</td>
+    <td>{{reg.typeRDMS}}</td>
+    <td>{{reg.namePPD}}</td>
+    <td>{{reg.allCount}}</td>
+    <td>{{reg.onCheckingCount}}</td>
+    <td>{{reg.checkedDudCount}}</td>
+    <td>{{reg.plan}}</td>
+    <td>{{reg.toMake}} ({{reg.toMakeUnchecked}})</td>
+    <td>
+      <mat-icon aria-hidden="false" aria-label="Example home icon">{{reg.isInPPR? 'check_box' : 'check_box_outline_blank'}}</mat-icon>
+    </td>
+    <td (click)="toRegistrationsDetailed(reg.codeRDMS)">Детальніше>>></td>
+  </tr>
+</table>

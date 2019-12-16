@@ -1,8 +1,10 @@
-import {RegistrationMsisdn} from './registration-msisdn';
+import {RegistrationMSISDN} from './registration-msisdn';
 
-export class RegistrationPlan extends RegistrationMsisdn {
-  plan = 0;
+export class RegistrationPlan extends RegistrationMSISDN {
   prize: string;
-  isCompleted = false;
-  mayBeCompleted = false;
+
+  constructor() {
+    super();
+    this.plan = 0;
+  }
 }

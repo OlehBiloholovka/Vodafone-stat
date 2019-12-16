@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Observable} from 'rxjs';
 import {Outlet} from '../shared/outlet';
-import {OutletService} from '../shared/outlet.service';
+import {RegistrationService} from '../../registrations/shared/registration.service';
 
 @Component({
   selector: 'app-base-outlets',
@@ -10,12 +10,13 @@ import {OutletService} from '../shared/outlet.service';
 })
 export class BaseOutletsComponent implements OnInit {
 
-  public outlets: Observable<Outlet[]>;
+  public filteredOutlets$: Observable<Outlet[]>;
 
-  constructor(private os: OutletService) { }
+
+  constructor(private rs: RegistrationService) { }
 
   ngOnInit() {
-    this.outlets = this.os.getOutletsList();
+    this.filteredOutlets$ = this.rs.filteredOutlets$;
   }
 
 }

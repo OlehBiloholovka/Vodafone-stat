@@ -1,0 +1,51 @@
+<h1>Partner</h1>
+<br>
+<p>
+  Усіх ТТ категорії А: {{aAllPlanCount$ | async}}
+  <span>Виконало план кат. А: {{aCompletedPlanCount$ | async}} </span>
+  <span>Без перевірки ДУД кат. А: {{aMayCompletedPlanCount$ | async}}</span>
+  <span> {{(aCompletedPlanCount$ | async)/(aAllPlanCount$ | async) | percent}}</span>
+  <span>({{(aMayCompletedPlanCount$ | async)/(aAllPlanCount$ | async) | percent}})</span>
+</p>
+<p>
+  Усіх ТТ категорії B: {{bAllPlanCount$ | async}}
+  <span>Виконало план кат. B: {{bCompletedPlanCount$ | async}} </span>
+  <span>Без перевірки ДУД кат. B: {{bMayCompletedPlanCount$ | async}}</span>
+  <span> {{(bCompletedPlanCount$ | async)/(bAllPlanCount$ | async) | percent}}</span>
+  <span>({{(bMayCompletedPlanCount$ | async)/(bAllPlanCount$ | async) | percent}})</span>
+</p>
+<p>Кількість: {{(filteredRegistrationsPartner$ | async)?.length}}</p>
+
+<table mat-table>
+  <thead>
+  <tr>
+    <th>RDMS</th>
+    <th>Назва</th>
+    <th>Адреса</th>
+    <th>Тип</th>
+    <th>ППД</th>
+    <th>К-ть реєстрацій</th>
+    <th>На перевірці</th>
+    <th>Перевірено</th>
+    <th>План</th>
+    <th>Зробити</th>
+    <th>(Зробити)</th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let reg of filteredRegistrationsPartner$ | async" [ngStyle]=getStyle(reg)>
+    <td>{{reg.codeRDMS}}</td>
+    <td>{{reg.nameRDMS}}</td>
+    <td>{{reg.addressRDMS}}</td>
+    <td>{{reg.typeRDMS}}</td>
+    <td>{{reg.namePPD}}</td>
+    <td>{{reg.allCount}}</td>
+    <td>{{reg.onCheckingCount}}</td>
+    <td>{{reg.checkedDudCount}}</td>
+    <td>{{reg.plan}}</td>
+    <td>{{reg.toMake}}</td>
+    <td>{{reg.toMakeUnchecked}}</td>
+    <td (click)="toRegistrationsDetailed(reg.codeRDMS)">Детальніше>>></td>
+  </tr>
+</table>

@@ -1,7 +1,7 @@
-import { RegistrationMsisdn } from './registration-msisdn';
+import { RegistrationMSISDN } from './registration-msisdn';
 
 describe('RegistrationMsisdn', () => {
   it('should create an instance', () => {
-    expect(new RegistrationMsisdn()).toBeTruthy();
+    expect(new RegistrationMSISDN()).toBeTruthy();
   });
 });

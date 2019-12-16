@@ -1,0 +1,9 @@
+.container {
+  margin: 10px;
+}
+.margin10left {
+  margin-left: 10px;
+}
+.selects > * {
+  margin: 10px;
+}

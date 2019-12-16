@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {AutoLogoutService} from './authentication/shared/auto-logout.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,7 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'Vodafone-stat';
+  constructor(private autoLogoutService: AutoLogoutService) {
+    this.autoLogoutService.start();
+  }
 }

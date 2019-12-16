@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {Observable} from 'rxjs';
-import {RegistrationMsisdn} from '../shared/registration-msisdn';
+import {RegistrationMSISDN} from '../shared/registration-msisdn';
 import {RegistrationService} from '../shared/registration.service';
+import {RegistrationRDMS} from '../shared/registration-rdms';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-registration-msisdn',
@@ -10,12 +12,32 @@ import {RegistrationService} from '../shared/registration.service';
 })
 export class RegistrationMsisdnComponent implements OnInit {
 
-  public registrationsMSISDN: Observable<RegistrationMsisdn[]>;
+  private registrationsMSISDN$: Observable<RegistrationMSISDN[]>;
+  public filteredRegistrationsMSISDN$: Observable<RegistrationMSISDN[]>;
 
-  constructor(private rs: RegistrationService) { }
+  aAllPlanCount$: Observable<number>;
+  bAllPlanCount$: Observable<number>;
+  aCompletedPlanCount$: Observable<number>;
+  bCompletedPlanCount$: Observable<number>;
+  aMayCompletedPlanCount$: Observable<number>;
+  bMayCompletedPlanCount$: Observable<number>;
+
+  constructor(private rs: RegistrationService, private router: Router) { }
 
   ngOnInit() {
-    this.registrationsMSISDN = this.rs.getRegistrationsMSISDN();
+    this.rs.showPlanFilter$ = true;
+    this.registrationsMSISDN$ = this.rs.registrationsMSISDN$;
+    this.filteredRegistrationsMSISDN$ = this.rs
+      .filteredRegistrationsMSISDN$;
+    this.rs.countPlan1(this, this.registrationsMSISDN$);
   }
 
+  private getStyle(rp: RegistrationRDMS): {} {
+    return this.rs.getStyle(rp);
+  }
+
+  toRegistrationsDetailed(codeMSISDN: number) {
+    this.rs.inputFilterValue$.next(codeMSISDN.toString());
+    this.router.navigate(['regs', 'registrations']).catch(console.log);
+  }
 }
