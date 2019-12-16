@@ -2,6 +2,7 @@ import {AfterContentChecked, ChangeDetectorRef, Component, OnDestroy, OnInit} fr
 import {BehaviorSubject, Observable} from 'rxjs';
 import {RegistrationService} from './shared/registration.service';
 import {OutletService} from '../base/shared/outlet.service';
+import {FormControl} from '@angular/forms';
 
 @Component({
   selector: 'app-registrations',
@@ -58,6 +59,7 @@ export class RegistrationsComponent implements OnInit, OnDestroy, AfterContentCh
   private _typeRDMSFilterValue$: BehaviorSubject<string> = this.rs.typeRDMSFilterValue$;
   // tslint:disable-next-line:variable-name
   private _planFilterValue$: BehaviorSubject<number[]> = this.rs.planFilterValue$;
+  planFilterValue = new FormControl();
 
   constructor(private rs: RegistrationService, private os: OutletService, private changeDetector: ChangeDetectorRef) { }
 

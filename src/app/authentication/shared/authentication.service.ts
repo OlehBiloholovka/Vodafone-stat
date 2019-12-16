@@ -1,19 +1,31 @@
 import {Injectable} from '@angular/core';
 import {AngularFireAuth} from '@angular/fire/auth';
 import * as firebase from 'firebase/app';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {MatSnackBar} from '@angular/material';
 import {Router} from '@angular/router';
-import {User} from 'firebase';
+import {User} from './user.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
+  get user(): BehaviorSubject<User> {
+    return this._user;
+  }
+  get phone(): BehaviorSubject<string> {
+    return this._phone;
+  }
+
   smsSent: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   private authState: firebase.User;
+  // tslint:disable-next-line:variable-name
+  private _user: BehaviorSubject<User> = new BehaviorSubject<User>(null);
+  // tslint:disable-next-line:variable-name
+  private _phone: BehaviorSubject<string> = new BehaviorSubject<string>(null);
+  userSubscription: Subscription;
 
   constructor(private afAuth: AngularFireAuth,
               private db: AngularFirestore,
@@ -36,6 +48,10 @@ export class AuthenticationService {
 
   logout(): void {
     this.afAuth.auth.signOut().catch(console.log);
+    this._user.next(undefined);
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+    }
   }
 
   verifyLoginCode(verificationCode: string, wr: any, user: any) {
@@ -46,13 +62,30 @@ export class AuthenticationService {
         user = result.user;
 
       })
+      .then(() => this.subscribeUser())
       .then(() => this.router.navigate(['']))
       .catch(error => console.log(error, 'Incorrect code entered?'));
+  }
+
+  private subscribeUser() {
+    // console.log(this._phone);
+    this.userSubscription = this.getUser()
+      .subscribe(u => {
+        this._user.next(u);
+      });
+  }
+
+  getUser(): Observable<User> {
+    return this.db.doc<User>('phones/' + this._phone.getValue())
+      .valueChanges();
   }
 
   login(phone: string, recaptchaVerifier: firebase.auth.RecaptchaVerifier, wr: any) {
     this.checkPhone(phone).subscribe(value => {
       if (value) {
+        this._phone.next(phone);
+        // storage.write('phone', phone);
+        localStorage.setItem('phone', phone);
         firebase.auth().signInWithPhoneNumber(this.getE164(phone), recaptchaVerifier)
           .then(result => {
             this.smsSent.next(true);
@@ -71,7 +104,7 @@ export class AuthenticationService {
     this._snackBar.open('Номер невірний', 'OK');
   }
 
-  isUser(): Observable<User> {
+  isUser(): Observable<firebase.User> {
     return this.afAuth.user;
   }
 

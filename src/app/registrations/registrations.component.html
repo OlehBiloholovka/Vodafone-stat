@@ -1,6 +1,5 @@
-<h4>Basic mat-select</h4>
 <mat-form-field>
-  <mat-label>Favorite food</mat-label>
+  <mat-label>Дата</mat-label>
   <mat-select [(ngModel)]="dateFilterValue$">
     <mat-option *ngFor="let el of datesList$ | async"
                 [value]="el | date: 'MM_yyyy'">
@@ -11,37 +10,65 @@
 
 
 
-<label>
-  <select [(ngModel)]="dateFilterValue$" [selectedIndex]="0">
-    <option [value]="''">--Select--</option>
-    <option *ngFor="let el of datesList$ | async"
-            [value]="el | date: 'MM_yyyy'">
-      {{el | date: 'MM/yyyy'}}
-    </option>
-  </select>
-</label>
+<!--<label>-->
+<!--  <select [(ngModel)]="dateFilterValue$" [selectedIndex]="0">-->
+<!--    <option [value]="''">&#45;&#45;Select&#45;&#45;</option>-->
+<!--    <option *ngFor="let el of datesList$ | async"-->
+<!--            [value]="el | date: 'MM_yyyy'">-->
+<!--      {{el | date: 'MM/yyyy'}}-->
+<!--    </option>-->
+<!--  </select>-->
+<!--</label>-->
 <div *ngIf="dateFilterValue$">
-  <label>
-    <input type="text" [(ngModel)]="inputFilterValue$" placeholder="Filter ...">
-  </label>
-  <label>
-    <select [(ngModel)]="namePPDFilterValue$">
-      <option [value]="''">--Select--</option>
-      <option *ngFor="let namePPD of namePPDList$ | async" [value]="namePPD">{{namePPD}}</option>
-    </select>
-  </label>
-  <label>
-    <select [(ngModel)]="typeRDMSFilterValue$"
-            [selectedIndex]="0">
-      <option *ngFor="let typeRDMS of typeRDMSList" [value]="typeRDMS.value">{{typeRDMS.value_text}}</option>
-    </select>
-  </label>
-  <label>
-    <select *ngIf="showPlanFilter$ | async"
-            [(ngModel)]="planFilterValue$"
-            [multiple]="true">
-      <option *ngFor="let el of registrationsFilterList" [value]="el['item_id']">{{el['item_text']}}</option>
-    </select>
-  </label>
+<!--  <label>-->
+<!--    <input type="text" [(ngModel)]="inputFilterValue$" placeholder="Filter ...">-->
+<!--  </label>-->
+  <mat-form-field>
+    <label>
+      <input [(ngModel)]="inputFilterValue$" matInput placeholder="Filter ..." type="text">
+    </label>
+  </mat-form-field>
+<!--  <label>-->
+<!--    <select [(ngModel)]="namePPDFilterValue$">-->
+<!--      <option [value]="''">&#45;&#45;Select&#45;&#45;</option>-->
+<!--      <option *ngFor="let namePPD of namePPDList$ | async" [value]="namePPD">{{namePPD}}</option>-->
+<!--    </select>-->
+<!--  </label>-->
+  <mat-form-field>
+    <mat-label>ППД</mat-label>
+    <mat-select [(ngModel)]="namePPDFilterValue$">
+      <mat-option [value]="''">--Select--</mat-option>
+      <mat-option *ngFor="let namePPD of namePPDList$ | async" [value]="namePPD">
+        {{namePPD}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+<!--  <label>-->
+<!--    <select [(ngModel)]="typeRDMSFilterValue$"-->
+<!--            [selectedIndex]="0">-->
+<!--      <option *ngFor="let typeRDMS of typeRDMSList" [value]="typeRDMS.value">{{typeRDMS.value_text}}</option>-->
+<!--    </select>-->
+<!--  </label>-->
+  <mat-form-field>
+    <mat-label>Категорія ТТ</mat-label>
+    <mat-select [(ngModel)]="typeRDMSFilterValue$">
+      <mat-option *ngFor="let typeRDMS of typeRDMSList" [value]="typeRDMS.value">
+        {{typeRDMS.value_text}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field *ngIf="showPlanFilter$ | async">
+    <mat-label>Виконання плану</mat-label>
+    <mat-select multiple [(ngModel)]="planFilterValue$">
+      <mat-option *ngFor="let el of registrationsFilterList" [value]="el['item_id']">{{el['item_text']}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+<!--  <label>-->
+<!--    <select *ngIf="showPlanFilter$ | async"-->
+<!--            [(ngModel)]="planFilterValue$"-->
+<!--            [multiple]="true">-->
+<!--      <option *ngFor="let el of registrationsFilterList" [value]="el['item_id']">{{el['item_text']}}</option>-->
+<!--    </select>-->
+<!--  </label>-->
 </div>
 <router-outlet></router-outlet>

@@ -173,7 +173,8 @@ export class RegistrationService {
               .map(value => value.namePPD)
               .filter((v, i, s) => s.indexOf(v) === i)
           ));
-      })
+      }),
+      map(data => data.sort())
     );
     return this._namePPDList$;
   }

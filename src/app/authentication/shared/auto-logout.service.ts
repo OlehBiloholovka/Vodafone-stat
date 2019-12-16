@@ -39,14 +39,14 @@ export class AutoLogoutService {
       document.body.addEventListener('click', () => this.reset());
       document.addEventListener('visibilitychange', () => {
           if (document.hidden) {
-            console.log('yes is hidden');
+            // console.log('yes is hidden');
             // this.check();
             // this.initInterval();
             this.isHiddenWindow = true;
             this.reset();
           } else {
             this.isHiddenWindow = false;
-            console.log('no is not hidden');
+            // console.log('no is not hidden');
             this.reset();
           }
         }
