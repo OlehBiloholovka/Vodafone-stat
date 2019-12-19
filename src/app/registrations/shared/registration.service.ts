@@ -475,7 +475,7 @@ export class RegistrationService {
         color: 'blue'
       };
     }
-    if (rp.toMakeUnchecked <= 3 && rp.allCount !== 0) {
+    if (rp.toMakeUnchecked < 3 && rp.allCount !== 0) {
       return {
         'background-color': 'yellow',
         color: 'blue'
