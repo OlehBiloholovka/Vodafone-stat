@@ -75,8 +75,10 @@ export class AutoLogoutService {
     const isTimeout = diff < 0;
 
     this.ngZone.run(() => {
-      if (isTimeout && this.authService.authenticated) {
+      // if (isTimeout && this.authService.authenticated) {
+      if (isTimeout && this.authService.user) {
         this.authService.logout();
+        this.authService.smsSent.next(false);
         this.router.navigate(['login']).catch(console.log);
       }
     });

@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {AngularFireAuth} from '@angular/fire/auth';
 import * as firebase from 'firebase/app';
-import {BehaviorSubject, Observable, Subscription} from 'rxjs';
-import {map} from 'rxjs/operators';
-import {AngularFirestore} from '@angular/fire/firestore';
+import {BehaviorSubject, Observable, of} from 'rxjs';
+import {map, switchMap} from 'rxjs/operators';
+import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore';
 import {MatSnackBar} from '@angular/material';
 import {Router} from '@angular/router';
 import {User} from './user.model';
@@ -12,29 +12,25 @@ import {User} from './user.model';
   providedIn: 'root'
 })
 export class AuthenticationService {
-  get user(): BehaviorSubject<User> {
-    return this._user;
-  }
-  get phone(): BehaviorSubject<string> {
-    return this._phone;
-  }
 
+  user: Observable<User>;
   smsSent: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  private authState: firebase.User;
-  // tslint:disable-next-line:variable-name
-  private _user: BehaviorSubject<User> = new BehaviorSubject<User>(null);
-  // tslint:disable-next-line:variable-name
-  private _phone: BehaviorSubject<string> = new BehaviorSubject<string>(null);
-  userSubscription: Subscription;
 
   constructor(private afAuth: AngularFireAuth,
               private db: AngularFirestore,
               // tslint:disable-next-line:variable-name
               private _snackBar: MatSnackBar,
               private router: Router) {
-    this.afAuth.authState.subscribe(user => this.authState = user);
+    this.user = afAuth.authState.pipe(
+      switchMap(user => {
+        if (user) {
+          return this.db.doc<User>(`users/${user.phoneNumber}`).valueChanges();
+        } else {
+          return of(null);
+        }
+      })
+    );
   }
-
   // tslint:disable-next-line:variable-name
   private _countryCode = '+380';
 
@@ -42,70 +38,44 @@ export class AuthenticationService {
     return this._countryCode;
   }
 
-  get authenticated(): boolean {
-    return this.authState !== null;
-  }
-
   logout(): void {
     this.afAuth.auth.signOut().catch(console.log);
-    this._user.next(undefined);
-    if (this.userSubscription) {
-      this.userSubscription.unsubscribe();
-    }
   }
 
-  verifyLoginCode(verificationCode: string, wr: any, user: any) {
+  verifyLoginCode(verificationCode: string, wr: any) {
     wr.confirmationResult
       .confirm(verificationCode)
-      .then(result => {
-
-        user = result.user;
-
-      })
-      .then(() => this.subscribeUser())
+      .then(credential => this.updateUserData(credential.user))
       .then(() => this.router.navigate(['']))
       .catch(error => console.log(error, 'Incorrect code entered?'));
   }
 
-  private subscribeUser() {
-    // console.log(this._phone);
-    this.userSubscription = this.getUser()
-      .subscribe(u => {
-        this._user.next(u);
-      });
-  }
-
-  getUser(): Observable<User> {
-    return this.db.doc<User>('phones/' + this._phone.getValue())
-      .valueChanges();
-  }
-
-  login(phone: string, recaptchaVerifier: firebase.auth.RecaptchaVerifier, wr: any) {
+  login(phoneNumber: string, recaptchaVerifier: firebase.auth.RecaptchaVerifier, wr: any) {
+    const phone = this.getE164(phoneNumber);
     this.checkPhone(phone).subscribe(value => {
       if (value) {
-        this._phone.next(phone);
-        // storage.write('phone', phone);
-        localStorage.setItem('phone', phone);
-        firebase.auth().signInWithPhoneNumber(this.getE164(phone), recaptchaVerifier)
-          .then(result => {
-            this.smsSent.next(true);
-            wr.confirmationResult = result;
-            // this.closeDialog();
-            // this.captchaState.next(true);
-          })
-          .catch(error => console.log(error + ' catch'));
+        this.signInWithPhoneNumber(phone, recaptchaVerifier, wr);
       } else {
         this.onIncorrectPhone();
       }
     });
   }
 
-  onIncorrectPhone() {
+  private checkPhone(phone: string): Observable<boolean> {
+    return this.db.doc<User>(`users/${phone}`).get().pipe(map(data => data.exists));
+  }
+
+  private onIncorrectPhone() {
     this._snackBar.open('Номер невірний', 'OK');
   }
 
-  isUser(): Observable<firebase.User> {
-    return this.afAuth.user;
+  private signInWithPhoneNumber(phone: string, recaptchaVerifier: firebase.auth.RecaptchaVerifier, wr: any) {
+    firebase.auth().signInWithPhoneNumber(phone, recaptchaVerifier)
+      .then(result => {
+        this.smsSent.next(true);
+        wr.confirmationResult = result;
+      })
+      .catch(error => console.log(error + ' catch'));
   }
 
   private getE164(phone: string) {
@@ -113,10 +83,12 @@ export class AuthenticationService {
     return `${num}`;
   }
 
-  private checkPhone(phone: string): Observable<boolean> {
-    return this.db
-      .collection('phones', ref => ref.where('phone', '==', Number.parseInt(phone, 10)))
-      .get()
-      .pipe(map(data => !data.empty));
+  private updateUserData(user: firebase.User) {
+    const userRef: AngularFirestoreDocument<any> = this.db.doc(`users/${user.phoneNumber}`);
+    const data: User = {
+      uid: user.uid,
+      phoneNumber: user.phoneNumber
+    };
+    return userRef.set(data, {merge: true});
   }
 }

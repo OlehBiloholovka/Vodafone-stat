@@ -12,7 +12,7 @@ import {User} from '../authentication/shared/user.model';
 })
 export class MainNavComponent implements OnInit {
 
-  user: User;
+  user: Observable<User>;
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
       map(result => result.matches),
@@ -27,8 +27,6 @@ export class MainNavComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.authService.getUser().subscribe(
-      value => this.user = value
-    );
+    this.user = this.authService.user;
   }
 }

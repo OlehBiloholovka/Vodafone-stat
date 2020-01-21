@@ -1,4 +1,9 @@
 export interface User {
-  phone: number;
-  role: string;
+  uid: string;
+  phoneNumber: string;
+  phone?: number;
+  email?: string;
+  photoUrl?: string;
+  displayName?: string;
+  role?: string;
 }
