@@ -6,6 +6,8 @@ export interface User {
   photoUrl?: string;
   displayName?: string;
   role?: Role;
+  codesPPD?: Array<number>;
+  namesEPD?: Array<string>;
 }
 
 export enum Role {
