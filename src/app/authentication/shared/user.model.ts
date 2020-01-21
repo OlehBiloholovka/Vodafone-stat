@@ -5,5 +5,13 @@ export interface User {
   email?: string;
   photoUrl?: string;
   displayName?: string;
-  role?: string;
+  role?: Role;
+}
+
+export enum Role {
+  admin = 'admin',
+  ppd = 'ppd',
+  supervisor = 'supervisor',
+  epd = 'epd',
+  chief = 'chief'
 }
