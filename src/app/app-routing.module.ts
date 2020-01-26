@@ -1,7 +1,11 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {canActivate, redirectLoggedInTo, redirectUnauthorizedTo} from '@angular/fire/auth-guard';
+import {AngularFireAuthGuard, redirectLoggedInTo, redirectUnauthorizedTo} from '@angular/fire/auth-guard';
 // import {MainNavComponent} from './main-nav/main-nav.component';
+
+
+const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
+const redirectLoggedInToHome = () => redirectLoggedInTo(['']);
 
 export const routes: Routes = [
   // {
@@ -71,20 +75,26 @@ export const routes: Routes = [
   {
     path: 'login',
     loadChildren: './authentication/authentication.module#AuthenticationModule',
-    ...canActivate(() => redirectLoggedInTo([''])),
+    // ...canActivate(redirectLoggedInToHome),
+    canActivate: [AngularFireAuthGuard],
+    data: { authGuardPipe: redirectLoggedInToHome},
     runGuardsAndResolvers: 'always'
   },
   {
     path: '',
     loadChildren: './main-nav/main-nav.module#MainNavModule',
-    ...canActivate(() => redirectUnauthorizedTo(['login'])),
+    // ...canActivate(redirectUnauthorizedToLogin),
+    canActivate: [AngularFireAuthGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin},
     runGuardsAndResolvers: 'always',
     // component: MainNavComponent,
   },
   {
     path: '**',
     loadChildren: './main-nav/main-nav.module#MainNavModule',
-    ...canActivate(() => redirectUnauthorizedTo(['login'])),
+    // ...canActivate(redirectUnauthorizedToLogin),
+    canActivate: [AngularFireAuthGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin},
     runGuardsAndResolvers: 'always',
     // component: MainNavComponent,
   },
