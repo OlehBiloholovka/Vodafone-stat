@@ -26,6 +26,7 @@ import {DashboardComponent} from '../dashboard/dashboard.component';
 import {AddressComponent} from '../address/address.component';
 import {TableComponent} from '../table/table.component';
 import {SettingsPprComponent} from '../admin/settings/settings-ppr/settings-ppr.component';
+import {Ppr1Component} from '../test/ppr1/ppr1.component';
 
 
 @NgModule({
@@ -43,7 +44,8 @@ import {SettingsPprComponent} from '../admin/settings/settings-ppr/settings-ppr.
     DashboardComponent,
     AddressComponent,
     TableComponent,
-    SettingsPprComponent
+    SettingsPprComponent,
+    Ppr1Component
   ],
   imports: [
     CommonModule,
