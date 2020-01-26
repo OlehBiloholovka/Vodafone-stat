@@ -28,5 +28,6 @@ export class MainNavComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = this.authService.user;
+    this.user.subscribe(console.log);
   }
 }

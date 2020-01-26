@@ -71,13 +71,20 @@ export const routes: Routes = [
   {
     path: 'login',
     loadChildren: './authentication/authentication.module#AuthenticationModule',
-    ...canActivate(redirectLoggedInTo([''])),
+    ...canActivate(() => redirectLoggedInTo([''])),
     runGuardsAndResolvers: 'always'
   },
   {
     path: '',
     loadChildren: './main-nav/main-nav.module#MainNavModule',
-    ...canActivate(redirectUnauthorizedTo(['login'])),
+    ...canActivate(() => redirectUnauthorizedTo(['login'])),
+    runGuardsAndResolvers: 'always',
+    // component: MainNavComponent,
+  },
+  {
+    path: '**',
+    loadChildren: './main-nav/main-nav.module#MainNavModule',
+    ...canActivate(() => redirectUnauthorizedTo(['login'])),
     runGuardsAndResolvers: 'always',
     // component: MainNavComponent,
   },

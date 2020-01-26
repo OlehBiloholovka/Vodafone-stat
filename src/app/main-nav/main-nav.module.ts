@@ -27,6 +27,7 @@ import {AddressComponent} from '../address/address.component';
 import {TableComponent} from '../table/table.component';
 import {SettingsPprComponent} from '../admin/settings/settings-ppr/settings-ppr.component';
 import {Ppr1Component} from '../test/ppr1/ppr1.component';
+import {TestPprComponent} from '../test/test-ppr/test-ppr.component';
 
 
 @NgModule({
@@ -45,7 +46,8 @@ import {Ppr1Component} from '../test/ppr1/ppr1.component';
     AddressComponent,
     TableComponent,
     SettingsPprComponent,
-    Ppr1Component
+    Ppr1Component,
+    TestPprComponent
   ],
   imports: [
     CommonModule,
