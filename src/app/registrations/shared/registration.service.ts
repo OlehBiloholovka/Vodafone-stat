@@ -69,7 +69,7 @@ export class RegistrationService {
     this._outletsPPR$ = this.outlets$.pipe(
       map(data => data
         .filter(value => ['Дистрибьютор', 'Дистрибутори'].includes(value.salesChannel)
-          && (value.typeRDMS.startsWith('A') || value.PPR === 'ДА'))
+          && (value.typeRDMS.startsWith('A') && !value.typeRDMS.includes('Z') || value.PPR === 'ДА'))
         // .filter(value => (value.typeRDMS.startsWith('A') || value.PPR === 'ДА'))
         .map(value => {
           value.typePPR = TypePPR.PPR;
