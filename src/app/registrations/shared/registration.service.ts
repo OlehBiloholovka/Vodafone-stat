@@ -17,54 +17,68 @@ import {TypePPR} from './type-ppr.enum';
 export class RegistrationService {
   get rdmsPPRList$(): AngularFireList<any> {
     let query;
-    if (!this.dateFilterValue$.getValue()) {query = (ref) => ref.child(this.dateFilterValue$.getValue()); }
+    if (!this.dateFilterValue$.getValue()) {
+      query = (ref) => ref.child(this.dateFilterValue$.getValue());
+    }
     console.log(this.dateFilterValue$.getValue());
     console.log(query);
     this._rdmsPPRList$ = this.db.list<any>(this.pprPath, query);
     // this._rdmsPPRList$ = this.db.list<any>(this.pprPath, ref => ref.child(this.dateFilterValue$.getValue()));
     return this._rdmsPPRList$;
   }
+
   set showPlanFilter$(value: boolean) {
     this._showPlanFilter$.next(value);
   }
+
   get planFilterValue$(): BehaviorSubject<number[]> {
     return this._planFilterValue$;
   }
+
   get typeRDMSFilterValue$(): BehaviorSubject<string> {
     return this._typeRDMSFilterValue$;
   }
+
   get namePPDFilterValue$(): BehaviorSubject<string> {
     return this._namePPDFilterValue$;
   }
+
   get dateFilterValue$(): BehaviorSubject<string> {
     return this._dateFilterValue$;
   }
+
   get inputFilterValue$(): BehaviorSubject<string> {
     return this._inputFilterValue$;
   }
+
   get outletsPPR$(): Observable<Outlet[]> {
-    if (this._outletsPPR$) { return this._outletsPPR$; }
-    const rdmsPPR$ = this.rdmsPPRList$.valueChanges();
-    this._outletsPPR$ = combineLatest(this.outlets$, rdmsPPR$)
-      .pipe(
-        map(([out, ppr]) => out
-          .filter(value => value.salesChannel === 'Дистрибьютор' && (value.typeRDMS.startsWith('A') || value.PPR === 'ДА'))
-          .map(value => {
-            const outlet: Outlet = Object.assign(value, ppr.find(v => v.codeRDMS === value.codeRDMS));
-            if (!outlet.typePPR) { outlet.typePPR = TypePPR.PPR; }
-            return outlet;
-          }))
-      );
-    // this._outletsPPR$ = this.outlets$.pipe(
-    //   map(data => data
-    //     .filter(value => value.salesChannel === 'Дистрибьютор' && value.PPR === 'ДА')
-    //     .map(value => {
-    //       value.typePPR = TypePPR.PPR;
-    //       return value;
-    //     })),
-    // );
+    if (this._outletsPPR$) {
+      return this._outletsPPR$;
+    }
+    // const rdmsPPR$ = this.rdmsPPRList$.valueChanges();
+    // this._outletsPPR$ = combineLatest(this.outlets$, rdmsPPR$)
+    //   .pipe(
+    //     map(([out, ppr]) => out
+    //       .filter(value => value.salesChannel === 'Дистрибьютор' && (value.typeRDMS.startsWith('A') || value.PPR === 'ДА'))
+    //       .map(value => {
+    //         const outlet: Outlet = Object.assign(value, ppr.find(v => v.codeRDMS === value.codeRDMS));
+    //         if (!outlet.typePPR) { outlet.typePPR = TypePPR.PPR; }
+    //         return outlet;
+    //       }))
+    //   );
+    this._outletsPPR$ = this.outlets$.pipe(
+      map(data => data
+        .filter(value => ['Дистрибьютор', 'Дистрибутори'].includes(value.salesChannel)
+          && (value.typeRDMS.startsWith('A') || value.PPR === 'ДА'))
+        // .filter(value => (value.typeRDMS.startsWith('A') || value.PPR === 'ДА'))
+        .map(value => {
+          value.typePPR = TypePPR.PPR;
+          return value;
+        })),
+    );
     return this._outletsPPR$;
   }
+
   // filterList<T>(oList: Observable<T[]>): Observable<T[]> {
   //   return combineLatest(oList, this._namePPDFilterValue$, this._typeRDMSFilterValue$,
   //     this._inputFilterValue$, this._planFilterValue$)
@@ -78,12 +92,17 @@ export class RegistrationService {
   //     );
   // }
   get filteredRegistrationsPartner$(): Observable<RegistrationRDMS[]> {
-    if (this._filteredRegistrationsPartner$) { return this._filteredRegistrationsPartner$; }
+    if (this._filteredRegistrationsPartner$) {
+      return this._filteredRegistrationsPartner$;
+    }
     this._filteredRegistrationsPartner$ = this.filterList(this.registrationsPartner$);
     return this._filteredRegistrationsPartner$;
   }
+
   get registrationsPartner$(): Observable<RegistrationRDMS[]> {
-    if (this._registrationsPartner$) { return this._registrationsPartner$; }
+    if (this._registrationsPartner$) {
+      return this._registrationsPartner$;
+    }
     this._registrationsPartner$ = this.combineRegistrations1(false, this.outlets$.pipe(
       map(data => data.filter(value => value.salesChannel === 'Дистрибьютор' &&
         !this.notPartnerTypesRDMS.includes(value.typeRDMS.substr(0, 2)) &&
@@ -91,81 +110,128 @@ export class RegistrationService {
     ), 3);
     return this._registrationsPartner$;
   }
+
   get filteredRegistrationsPPR$(): Observable<RegistrationRDMS[]> {
-    if (this._filteredRegistrationsPPR$) { return this._filteredRegistrationsPPR$; }
+    if (this._filteredRegistrationsPPR$) {
+      return this._filteredRegistrationsPPR$;
+    }
     this._filteredRegistrationsPPR$ = this.filterList(this.registrationsPPR$);
     return this._filteredRegistrationsPPR$;
   }
+
   get registrationsPPR$(): Observable<RegistrationRDMS[]> {
-    if (this._registrationsPPR$) { return this._registrationsPPR$; }
+    if (this._registrationsPPR$) {
+      return this._registrationsPPR$;
+    }
     this._registrationsPPR$ = this.combineRegistrations1(false, this.outletsPPR$);
     return this._registrationsPPR$;
   }
+
   get filteredRegistrationsPlan$(): Observable<RegistrationPlan[]> {
-    if (this._filteredRegistrationsPlan$) { return this._filteredRegistrationsPlan$; }
+    if (this._filteredRegistrationsPlan$) {
+      return this._filteredRegistrationsPlan$;
+    }
     this._filteredRegistrationsPlan$ = this.filterList(this.registrationsPlan$);
     return this._filteredRegistrationsPlan$;
   }
+
   get registrationsPlan$(): Observable<RegistrationPlan[]> {
-    if (this._registrationsPlan$) { return this._registrationsPlan$; }
+    if (this._registrationsPlan$) {
+      return this._registrationsPlan$;
+    }
     this._registrationsPlan$ = this.getRegistrationsPlan();
     return this._registrationsPlan$;
   }
+
   get filteredPartners$(): Observable<Partner[]> {
-    if (this._filteredPartners$) { return this._filteredPartners$; }
+    if (this._filteredPartners$) {
+      return this._filteredPartners$;
+    }
     this._filteredPartners$ = this.filterList(this.partners$);
     return this._filteredPartners$;
   }
+
   get partners$(): Observable<Partner[]> {
-    if (this._partners$) { return this._partners$; }
+    if (this._partners$) {
+      return this._partners$;
+    }
     this._partners$ = this.getList(this.partnerPath);
     return this._partners$;
   }
+
   get filteredRegistrationsMSISDN$(): Observable<RegistrationMSISDN[]> {
-    if (this._filteredRegistrationsMSISDN$) { return this._filteredRegistrationsMSISDN$; }
+    if (this._filteredRegistrationsMSISDN$) {
+      return this._filteredRegistrationsMSISDN$;
+    }
     this._filteredRegistrationsMSISDN$ = this.filterList(this.registrationsMSISDN$);
     return this._filteredRegistrationsMSISDN$;
   }
+
   get registrationsMSISDN$(): Observable<RegistrationMSISDN[]> {
-    if (this._registrationsMSISDN$) { return this._registrationsMSISDN$; }
+    if (this._registrationsMSISDN$) {
+      return this._registrationsMSISDN$;
+    }
     this._registrationsMSISDN$ = this.combineRegistrations(true) as Observable<RegistrationMSISDN[]>;
     return this._registrationsMSISDN$;
   }
+
   get filteredRegistrationsRDMS$(): Observable<RegistrationRDMS[]> {
-    if (this._filteredRegistrationsRDMS$) { return this._filteredRegistrationsRDMS$; }
+    if (this._filteredRegistrationsRDMS$) {
+      return this._filteredRegistrationsRDMS$;
+    }
     this._filteredRegistrationsRDMS$ = this.filterList(this.registrationsRDMS$);
     return this._filteredRegistrationsRDMS$;
   }
+
   get registrationsRDMS$(): Observable<RegistrationRDMS[]> {
-    if (this._registrationsRDMS$) { return this._registrationsRDMS$; }
+    if (this._registrationsRDMS$) {
+      return this._registrationsRDMS$;
+    }
     this._registrationsRDMS$ = this.combineRegistrations(false);
     return this._registrationsRDMS$;
   }
+
   get filteredRegistrationsDetailed$(): Observable<RegistrationDetailed[]> {
-    if (this._filteredRegistrationsDetailed$) { return this._filteredRegistrationsDetailed$; }
+    if (this._filteredRegistrationsDetailed$) {
+      return this._filteredRegistrationsDetailed$;
+    }
     this._filteredRegistrationsDetailed$ = this.filterList(this.registrationsDetailed$);
     return this._filteredRegistrationsDetailed$;
   }
+
   get registrationsDetailed$(): Observable<RegistrationDetailed[]> {
-    if (this._registrationsDetailed$) { return this._registrationsDetailed$; }
+    if (this._registrationsDetailed$) {
+      return this._registrationsDetailed$;
+    }
     this._registrationsDetailed$ = this.getList(this.detailedPath);
     return this._registrationsDetailed$;
   }
+
   get filteredOutlets$(): Observable<Outlet[]> {
-    if (this._filteredOutlets$) { return this._filteredOutlets$; }
+    if (this._filteredOutlets$) {
+      return this._filteredOutlets$;
+    }
     this._filteredOutlets$ = this.filterList(this.outlets$);
     return this._filteredOutlets$;
   }
+
   get outlets$(): Observable<Outlet[]> {
-    if (this._outlets$) { return this._outlets$; }
+    if (this._outlets$) {
+      return this._outlets$;
+    }
     this._outlets$ = this.getList(this.outletsPath);
     return this._outlets$;
   }
+
   get namePPDList$(): Observable<string[]> {
-    if (this._namePPDList$) { return this._namePPDList$; }
+    if (this._namePPDList$) {
+      return this._namePPDList$;
+    }
     this._namePPDList$ = this._dateFilterValue$.pipe(
       switchMap(datePath => {
-        if (!datePath) { return new Array<string[]>(1); }
+        if (!datePath) {
+          return new Array<string[]>(1);
+        }
         return this.db.list<Outlet>(this.outletsPath, ref => ref.child(datePath))
           .valueChanges()
           .pipe(map(
@@ -278,7 +344,9 @@ export class RegistrationService {
 
   getPPR(): AngularFireList<any> {
     let query;
-    if (!this.dateFilterValue$.getValue()) {query = (ref) => ref.child(this.dateFilterValue$.getValue()); }
+    if (!this.dateFilterValue$.getValue()) {
+      query = (ref) => ref.child(this.dateFilterValue$.getValue());
+    }
     this._rdmsPPRList$ = this.db.list<any>(this.pprPath, query);
     return this._rdmsPPRList$;
   }
@@ -288,24 +356,24 @@ export class RegistrationService {
       .snapshotChanges().pipe(
         map(data => data
           .map(value => {
-      const dateArray: any[] = value.key.split('_');
-      return new Date(dateArray[1], dateArray[0] - 1);
+            const dateArray: any[] = value.key.split('_');
+            return new Date(dateArray[1], dateArray[0] - 1);
           }).sort((a, b) => b.valueOf() - a.valueOf())
         )
       );
   }
 
-  getDropdownList(): {item_id: number, item_text: string}[] {
+  getDropdownList(): { item_id: number, item_text: string }[] {
     return [
-      { item_id: 0, item_text: 'Без реєстрацій' },
-      { item_id: 1, item_text: 'План виконано' },
-      { item_id: 2, item_text: 'Можливе виконання' },
-      { item_id: 3, item_text: 'До виконання <4' },
-      { item_id: 4, item_text: 'Інші' }
+      {item_id: 0, item_text: 'Без реєстрацій'},
+      {item_id: 1, item_text: 'План виконано'},
+      {item_id: 2, item_text: 'Можливе виконання'},
+      {item_id: 3, item_text: 'До виконання <4'},
+      {item_id: 4, item_text: 'Інші'}
     ];
   }
 
-  getTypeRDMSList(): {value: string, value_text: string}[] {
+  getTypeRDMSList(): { value: string, value_text: string }[] {
     return [
       {value: '', value_text: 'A/B'},
       {value: 'A', value_text: 'A'},
@@ -319,7 +387,9 @@ export class RegistrationService {
     return this._dateFilterValue$.pipe(
       switchMap(datePath => {
         // if (!datePath) { return new Array<T[]>(1); }
-        if (!datePath) { return new BehaviorSubject<T[]>(new Array<T>()); }
+        if (!datePath) {
+          return new BehaviorSubject<T[]>(new Array<T>());
+        }
         return this.db.list<T>(path, ref => ref.child(datePath)).valueChanges();
       })
     );
@@ -475,7 +545,7 @@ export class RegistrationService {
         color: 'blue'
       };
     }
-    if (rp.toMakeUnchecked <= 3 && rp.allCount !== 0) {
+    if (rp.toMakeUnchecked < 3 && rp.allCount !== 0) {
       return {
         'background-color': 'yellow',
         color: 'blue'
@@ -508,19 +578,21 @@ export class RegistrationService {
   // }
 
   private getRegistrationsPlan(): Observable<RegistrationPlan[]> {
-    return  combineLatest(this.getList<RegistrationPlan>(this.planPath),
-        this.registrationsMSISDN$, this.outlets$).pipe(
-        map(([rp, rm, ol]) => rp.map(p => {
-          const rPlan: RegistrationPlan = Object
-            .assign(new RegistrationPlan(), p, rm.find(m => p.codeMSISDN === m.codeMSISDN),
-              ol.find(o => p.codeRDMS === o.codeRDMS));
-          if (!rPlan.typeRDMS) { rPlan.typeRDMS = ''; }
-          rPlan.plan = p.plan;
-          RegistrationService.calculateCheckedRegistrations(rPlan);
-          return rPlan;
-        })),
-        map(data => data.sort(this.compareRegistrations())),
-      );
+    return combineLatest(this.getList<RegistrationPlan>(this.planPath),
+      this.registrationsMSISDN$, this.outlets$).pipe(
+      map(([rp, rm, ol]) => rp.map(p => {
+        const rPlan: RegistrationPlan = Object
+          .assign(new RegistrationPlan(), p, rm.find(m => p.codeMSISDN === m.codeMSISDN),
+            ol.find(o => p.codeRDMS === o.codeRDMS));
+        if (!rPlan.typeRDMS) {
+          rPlan.typeRDMS = '';
+        }
+        rPlan.plan = p.plan;
+        RegistrationService.calculateCheckedRegistrations(rPlan);
+        return rPlan;
+      })),
+      map(data => data.sort(this.compareRegistrations())),
+    );
   }
 
   private combineRegistrations(isMSISDN: boolean): Observable<RegistrationRDMS[]> {
@@ -552,8 +624,12 @@ export class RegistrationService {
         const registration: RegistrationRDMS = Object
           .assign(isMSISDN ? new RegistrationMSISDN() : new RegistrationRDMS(),
             o, rm.find(m => o[regProperty] === m[regProperty]));
-        if (plan) { registration.plan = plan; }
-        if (o[this.pprPropertyName] === 'ДА') { registration.isInPPR = true; }
+        if (plan) {
+          registration.plan = plan;
+        }
+        if (o[this.pprPropertyName] === 'ДА') {
+          registration.isInPPR = true;
+        }
         registration.namePPD = o.namePPD;
         // if (o['typePPR']) {
         //   console.log(o['typePPR']);
@@ -567,7 +643,7 @@ export class RegistrationService {
   }
 
   private groupRegistrations(isMSISDN: boolean): Observable<RegistrationRDMS[]> {
-    return  this.registrationsDetailed$.pipe(
+    return this.registrationsDetailed$.pipe(
       map(data => {
         const registrationsMap = new Map<number, RegistrationRDMS>();
         data.map(reg => {
