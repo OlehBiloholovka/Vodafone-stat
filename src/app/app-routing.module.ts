@@ -70,9 +70,9 @@ export const routes: Routes = [
   // },
   {
     path: 'login',
+    loadChildren: './authentication/authentication.module#AuthenticationModule',
     ...canActivate(redirectLoggedInTo([''])),
-    runGuardsAndResolvers: 'always',
-    loadChildren: './authentication/authentication.module#AuthenticationModule'
+    runGuardsAndResolvers: 'always'
   },
   {
     path: '',
